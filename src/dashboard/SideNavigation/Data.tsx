@@ -3,27 +3,22 @@ import EventsIcon from './icons/Events';
 const data: any = {
     principal: [
         {
-            section: 'Home',
+            section: 'Inicio',
             icon: <EventsIcon />,
             link: '/',
         },
         {
-            section: 'Pacientes',
+            section: 'Nueva Venta',
             icon: <EventsIcon />,
-            link: '/pacientes',
+            link: '/nueva-venta',
         },
         {
-            section: 'Sucursales',
-            icon: <EventsIcon />,
-            link: '/sucursales',
-        },
-        {
-            section: 'Agendas',
+            section: 'Ventas',
             icon: <EventsIcon />,
             link: '/agendas',
         },
     ],
-    otros: [
+    mantenimiento: [
         {
             section: 'Usuarios',
             icon: <EventsIcon />,
@@ -33,6 +28,26 @@ const data: any = {
             section: 'Facturas y servicios',
             icon: <EventsIcon />,
             link: '/faturas-y-servicios',
+        },
+        {
+            section: 'Nuevos Productos',
+            icon: <EventsIcon />,
+            link: '/faturas-y-servicios',
+        },
+        {
+            section: 'Proveedores',
+            icon: <EventsIcon />,
+            link: '/proveedores',
+        },
+        {
+            section: 'Admin Categorias',
+            icon: <EventsIcon />,
+            link: '/admin-category',
+        },
+        {
+            section: 'Administracion',
+            icon: <EventsIcon />,
+            link: '/admin-category',
         },
     ]
 };

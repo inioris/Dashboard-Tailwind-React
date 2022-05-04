@@ -1,21 +1,44 @@
 import React, { FC } from 'react';
+import GlobalStore from './hooks/globalStore';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DashboardLayout from "./dashboard/layout";
+import Home from './view/Home';
+import PointSale from './view/PointSale';
+import Login from './view/Login';
+import { setAuthorizationToken } from "./utils/setAuthorizationToken";
+import redirectLoginAuth from "./utils/redirectLoginAuth";
+import StoreProviderAuthLogin from "./hooks/AuthLogin/StoreProvider";
 
+setAuthorizationToken(global.window?.localStorage.AuthToken);
+redirectLoginAuth();
 
 const App: FC = () => {
-  console.log(window?.location)
+  // console.log(window?.location)
   return (
       <>
-      <DashboardLayout>
-                <div className="bg-white">
-                    <p>
-                      Edit <code>src/App.tsx</code> and save to reload.
-                    </p>
-
-                </div>
-      </DashboardLayout>
-
-      </>
+        <StoreProviderAuthLogin>
+            {
+                global.window?.localStorage.AuthToken ?
+                  (<>
+                    <GlobalStore>
+                      <BrowserRouter>
+                        <DashboardLayout>
+                            <Routes>
+                              <Route path="/" element={ <Home /> } />
+                              <Route path="/nueva-venta" element={<PointSale />} />
+                            </Routes>
+                        </DashboardLayout>
+                      </BrowserRouter>
+                    </GlobalStore>
+                  </>):
+                  <BrowserRouter>
+                     <Routes>
+                       <Route path="/login" element={ <Login />} />
+                     </Routes>
+                  </BrowserRouter>
+            }
+        </StoreProviderAuthLogin>
+        </>
   );
 }
 
