@@ -8,7 +8,8 @@ import { useStoreProducts } from './../../hooks/Products/StoreProvider';
 import ModalComponents from '../../components/ModalComponent';
 import { useCheckIn } from "../../hooks/CheckIn";
 import Notification from "../../components/Notification";
-import RemoveIcons from '../../icons/RemoveIcons';
+import ReceiptPayment from '../../components/ReceiptPayment';
+import { Combobox } from '@headlessui/react'
 
 interface InewSaleListPrime {
     name: string;
@@ -18,6 +19,15 @@ interface InewSaleListPrime {
     unit: number;
     unitPriceTotal: number;
 }
+
+const people: any = [
+    'Wade Cooper',
+    'Arlene McCoy',
+    'Devon Webb',
+    'Tom Cook',
+    'Tanya Fox',
+    'Hellen Schmidt',
+  ];
 
 function PointSale(){
 
@@ -36,11 +46,19 @@ function PointSale(){
     const [checkRNC, setCheckRNC] = useState(false);
     const [listViewProducts, setListViewProducts] : any[] = useState([]);
     const [inputSearch, setInputSearch] = useState('');
+    const [inputServiceAndProducts, setInputServiceAndProducts] = useState('');
     const [receipt, setReceipt] = useState(false);
     const [discounts, setDiscounts] = useState(0);
     const [rnc, setRNC] = useState('');
     const [taxes, setTaxes] = useState(0);
     const [showNotifications, setShowNotification] = useState(false);
+
+    const [selectedPerson, setSelectedPerson] = useState(people[0])
+    const [query, setQuery] = useState('')
+
+  const filteredPeople = query === '' ? people : people.filter((person: any) => {
+          return person.toLowerCase().includes(query.toLowerCase())
+     });
 
     useEffect(function updatedPaymentCashier() {
         listViewProducts.map((item: InewSaleListPrime) => {
@@ -94,8 +112,10 @@ function PointSale(){
     }
 
     const onPucharsePayment = async () => {
-        console.log('hola');
-        const listProductsSale: any[] = listViewProducts.map((item: any) => {
+
+        const listProductsSale: any[] = [];
+
+        listViewProducts.map((item: any) => {
             return listProductsSale.push({
                 "product": item.id,
                 "quantity": item.unit,
@@ -117,13 +137,16 @@ function PointSale(){
             "updatedAt": new Date(),
             "listOfProductSale": listProductsSale
         };
-        console.log(purchase);
-        await saveCheckIn(purchase).then((res: any) => {
-            if(res.status === 200 || res.status === 204){
-                setReceipt(!receipt);
-                setShowNotification(!showNotifications);
-            }
-        });
+        
+        await saveCheckIn(purchase);
+        setReceipt(!receipt);
+        setListViewProducts([]);
+        setShowNotification(!showNotifications);
+        setPayment(0);
+        setRNC('');
+        setTaxes(0);
+        setPaymentMoney(0);
+        setInputSearch('');
     }
 
     return (
@@ -131,8 +154,12 @@ function PointSale(){
             <div className={'grid grid-cols-12 gap-4'}>
                 {
                     showNotifications ?
-                        <div className="col-span-12 relative">
-                            <Notification show={showNotifications} changesShow={() => setShowNotification(!showNotifications)} />
+                        <div className="col-span-12" style={{ zIndex: '9999' }}>
+                            <Notification 
+                                message={'Guardo con Exito!'}
+                                subMessage={'Gracias por su Compra.'}
+                                show={showNotifications} 
+                                changesShow={() => setShowNotification(!showNotifications)} />
                         </div> : null
                 }
                 
@@ -141,7 +168,7 @@ function PointSale(){
                             <span className={'text-2xl pl-2'} style={{ borderLeft: '5px solid #0415FA' }}> Lista de Compras </span>
                         </div>
                         <div className={'grid grid-cols-2 gap-4 py-4'}>
-                            <div className={'pl-2'}>
+                            <div className={'pl-2 col-span-1'}>
                                 <Input
                                     type="text"
                                     max={4}
@@ -152,6 +179,29 @@ function PointSale(){
                                     wrapperClass={"mt-1 focus:ring-indigo-500 p-2 pl-3 2xl:text-xl focus:border-indigo-500 block w-full border shadow-sm sm:text-sm border-gray-300 rounded-md"}
                                 />
                             </div>
+                            <div className={'col-span-1 w-full'}>
+                                <div className={'absolute'}>
+                                    <Combobox value={selectedPerson} onChange={setSelectedPerson}>
+                                        <Combobox.Input 
+                                            onChange={(event) => setQuery(event.target.value)} 
+                                            className={'mt-1 mb-2 focus:ring-indigo-500 p-2 pl-3 2xl:text-xl focus:border-indigo-500 block w-full border shadow-sm sm:text-sm border-gray-300 rounded-md'}
+                                        />
+                                        <Combobox.Options 
+                                            className={'w-full bg-white p-4'}
+                                        >
+                                            {filteredPeople.map((person : any) => (
+                                            <Combobox.Option 
+                                                key={person} 
+                                                value={person} 
+                                                className={'p-2 rounded-md hover:bg-gray-100'}
+                                            >
+                                               <span> {person} </span> 
+                                            </Combobox.Option>
+                                            ))}
+                                        </Combobox.Options>
+                                    </Combobox>
+                                </div>
+                             </div>
                         </div>
                         
                         <div className="overflow-scroll shadow h-96 ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0">
@@ -224,6 +274,7 @@ function PointSale(){
                                     const {value} = e.target;
                                     setPaymentMoney(Number(value));
                                  }}
+                                 value={paymentMoney}
                                  wrapperClass={"mt-1 focus:ring-indigo-500 p-4 pl-3 2xl:text-xl focus:border-indigo-500 block w-full border shadow-sm text-xl border-gray-300 rounded-md"}
                                  placeholder={"Pago Con"}
                             />
@@ -284,7 +335,7 @@ function PointSale(){
                         <hr />
                         <div className={'grid pt-16'}>
                             <button
-                                type="submit"
+                                type="button"
                                 disabled={payment < paymentMoney && (Number(paymentMoney) - Number(payment)) <= 0  ? true : false}
                                 onClick={() => setReceipt(!receipt)}
                                 className={`inline-flex ${payment < paymentMoney ? 'bg-green-500 hover:bg-green-700' : 'bg-gray-300'} justify-center py-4 px-4 2xl:py-4 2xl:px-8 border border-transparent shadow-sm text-sm xl:text-2xl 2xl:text-2xl rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
@@ -299,90 +350,13 @@ function PointSale(){
                     openForm={receipt}
                     size={'600px'}
                 >
-                    <div className={'bg-white grid grid-cols-1'}>
-            <div className="mt-10 lg:mt-0 px-8 py-4 pb-10">
-            
-                <h2 className="text-xl flex justify-center font-medium text-gray-900">Resumen de Compra</h2>
-
-                <div className="mt-4 bg-white border border-gray-200 rounded-lg shadow-sm">
-                <h3 className="sr-only">Items in your cart</h3>
-                <div className={'h-64 overflow-scroll'}>
-                        <table className="min-w-full divide-y divide-gray-300">
-                                <thead className="bg-gray-100">
-                                    <tr>
-                                        <th scope="col" className={"py-2.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"}>
-                                            Codigo
-                                        </th>
-                                        <th scope="col" className={"px-3 py-2.5 text-left text-sm font-semibold text-gray-900"}>
-                                            Nombre Producto
-                                        </th>
-                                        <th scope="col" className={"px-3 py-2.5 text-left text-sm font-semibold text-gray-900"}>
-                                            Cantidad
-                                        </th>
-                                        <th scope="col" className={"px-3 py-2.5 text-left text-sm font-semibold text-gray-900"}>
-                                            Precio Total
-                                        </th>
-                                        <th scope="col" className="relative py-2.5 pl-3 pr-4 sm:pr-6 lg:pr-8" />
-                                    </tr>
-                                </thead>
-                                <tbody className={"divide-y divide-gray-200 bg-white h-48"}>
-                                        {
-                                           listViewProducts ? listViewProducts.map((product: any, key: number) => (
-                                                <tr>
-                                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
-                                                        {product.code}
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.name}</td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.unit}</td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.unitPriceTotal}</td>
-                                                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
-                                                        <RemoveIcons w="w-6" h="h-6" class={"text-red-600 hover:text-red-800"} />
-                                                    </td>
-                                                </tr>
-                                            )) : null
-                                        }
-                                </tbody>
-                        </table>
-                </div>
-                <dl className="border-t border-gray-200 py-6 px-4 space-y-6 sm:px-6">
-                    <div className="flex items-center justify-between">
-                        <dt className="text-sm">Subtotal</dt>
-                        <dd className="text-sm font-medium text-gray-900">
-                            ${payment}
-                        </dd>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <dt className="text-sm">Descuentos</dt>
-                        <dd className="text-sm font-medium text-gray-900">
-                            ${discounts}
-                        </dd>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <dt className="text-sm">Impuestos</dt>
-                        <dd className="text-sm font-medium text-gray-900">
-                            ${taxes}
-                        </dd>
-                    </div>
-                    <div className="flex items-center justify-between border-t border-gray-200 pt-6">
-                        <dt className="text-base font-medium">Total</dt>
-                        <dd className="text-base font-medium text-gray-900">
-                            ${ Number(payment)  + Number(taxes) + Number(discounts) }
-                        </dd>
-                    </div>
-                </dl>
-
-                <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                    <button
-                        type={"button"}
-                        onClick={onPucharsePayment}
-                        className={"w-full bg-indigo-600 border border-transparent rounded-md shadow-sm py-3 px-4 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"}
-                    >
-                    Confirmar Orden
-                    </button>
-                </div>
-                </div>
-            </div>
-        </div>
+                    <ReceiptPayment 
+                        list={listViewProducts}
+                        subTotal={payment}
+                        discounts={discounts}
+                        taxes={taxes}
+                        onClickSave={() => onPucharsePayment}
+                    />
                 </ModalComponents>
             </div>
         </>

@@ -1,26 +1,118 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { isEmpty } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import TableComponent from '../../components/TablaComponent';
-import { useProducts } from './../../hooks/Products';
-import { useStoreProducts } from './../../hooks/Products/StoreProvider';
+import { useCheckIn } from './../../hooks/CheckIn';
+import { useStoreCheckIn } from './../../hooks/CheckIn/StoreProvider';
+
+const transactions: any = [
+    {
+      id: 'AAPS0L',
+      company: 'Chase & Co.',
+      share: 'CAC',
+      commission: '+$4.37',
+      price: '$3,509.00',
+      quantity: '12.00',
+      netAmount: '$4,397.00',
+    },
+    {
+        id: 'AAPS0L',
+        company: 'Chase & Co.',
+        share: 'CACRRR',
+        commission: '+$4.37',
+        price: '$3,509.00',
+        quantity: '12.00',
+        netAmount: '$4,397.00',
+      },
+      {
+        id: 'AAPS0L',
+        company: 'Chase & Co.',
+        share: 'CACAA',
+        commission: '+$4.37',
+        price: '$3,509.00',
+        quantity: '12.00',
+        netAmount: '$4,397.00',
+      },
+      {
+        id: 'AAPS0L',
+        company: 'Chase & Co.',
+        share: 'CACHH',
+        commission: '+$4.37',
+        price: '$3,509.00',
+        quantity: '12.00',
+        netAmount: '$4,397.00',
+      },
+      {
+        id: 'AAPS0L',
+        company: 'Chase & Co.',
+        share: 'CACLLL',
+        commission: '+$4.37',
+        price: '$3,509.00',
+        quantity: '12.00',
+        netAmount: '$4,397.00',
+      },
+      {
+        id: 'AAPS0L',
+        company: 'Chase & Co.',
+        share: 'CACVVVV',
+        commission: '+$4.37',
+        price: '$3,509.00',
+        quantity: '12.00',
+        netAmount: '$4,397.00',
+      },
+      {
+          id: 'AAPS0L',
+          company: 'Chase & Co.',
+          share: 'CACXCXX',
+          commission: '+$4.37',
+          price: '$3,509.00',
+          quantity: '12.00',
+          netAmount: '$4,397.00',
+        },
+        {
+          id: 'AAPS0L',
+          company: 'Chase & Co.',
+          share: 'CACLOLD',
+          commission: '+$4.37',
+          price: '$3,509.00',
+          quantity: '12.00',
+          netAmount: '$4,397.00',
+        },
+        {
+          id: 'AAPS0L',
+          company: 'Chase & Co.',
+          share: 'CACGFDS',
+          commission: '+$4.37',
+          price: '$3,509.00',
+          quantity: '12.00',
+          netAmount: '$4,397.00',
+        },
+        {
+          id: 'AAPS0L',
+          company: 'Chase & Co.',
+          share: 'CACTREW',
+          commission: '+$4.37',
+          price: '$3,509.00',
+          quantity: '12.00',
+          netAmount: '$4,397.00',
+        },
+    // More transactions...
+  ];
 
 const projects = [
-    { name: 'Cuadre de Caja', initials: 'GA', href: '#', members: 16, bgColor: 'bg-pink-600' },
-    { name: 'Avastecer Productos', initials: 'CD', href: '#', members: 12, bgColor: 'bg-purple-600' },
-    { name: 'Inventario', initials: 'T', href: '#', members: 16, bgColor: 'bg-yellow-500' },
-    { name: 'Ventas del dia', initials: 'RC', href: '#', members: 8, bgColor: 'bg-green-500' },
+    { name: 'Cuadre de Caja', initials: 'CC', href: '#', members: 16, bgColor: 'bg-pink-600' },
+    { name: 'Avastecer Productos', initials: 'AP', href: '#', members: 12, bgColor: 'bg-purple-600' },
+    { name: 'Inventario', initials: 'I', href: '#', members: 16, bgColor: 'bg-yellow-500' },
+    { name: 'Ventas del Dia', initials: 'VD', href: '#', members: 8, bgColor: 'bg-green-500' },
   ];
 
 export default function Home() {
 
-    const { getAllProducts } : any = useProducts();
-    const { products } : any = useStoreProducts();
-
-    console.log(products, 'aqui');
+    const { getAllCheckIn } : any = useCheckIn();
+    const { checkIn } : any = useStoreCheckIn();
 
     useEffect(() => {
-        getAllProducts();
+        getAllCheckIn();
     }, []);
 
     return (
@@ -37,7 +129,7 @@ export default function Home() {
                                 <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
                                 <div className="flex-1 px-6 py-4 text-sm truncate">
                                     <Link to={`/${project.href}`} className="text-gray-900 font-medium hover:text-gray-600">
-                                    {project.name}
+                                        {project.name}
                                     </Link>
                                     <p className="text-gray-500">{project.members} Members</p>
                                 </div>
@@ -58,11 +150,63 @@ export default function Home() {
                     {/* End information data headers */ }
                     <hr className={'sm:pb-2 md:pb-2 xl:pb-3 2xl:pb-3'} />
                     {/* show data components */ }
-                    { !isEmpty(products) ? products[0].permissions : ''}
+                    
                     <div className={'grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2'}>
                         <div className={'col-span-1'}>
                             <TableComponent
                                 isMessage={true}
+                                children={
+                                    <>
+                                        <thead className="bg-gray-50">
+                                            <tr>
+                                            <th
+                                                scope="col"
+                                                className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                            >
+                                                ID
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            >
+                                                 Realizada por
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            >
+                                                 Total Compra
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            >
+                                                Devuelta
+                                            </th>
+                                            <th scope="col" className="relative whitespace-nowrap py-3.5 pl-3 pr-4 sm:pr-6">
+                                                <span className="sr-only">Edit</span>
+                                            </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-200 bg-white">
+                                            { !isEmpty(checkIn) ? [...checkIn].reverse().slice(0, 10).map((transaction: any) => (
+                                            <tr key={transaction.id}>
+                                                <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-6">
+                                                {transaction.id}
+                                                </td>
+                                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">{get(transaction, 'user.name', '')}</td>
+                                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">${transaction.totalToPay}</td>
+                                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">${transaction.payWith}</td>
+                                                <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                                <Link to={`/${transaction.id}`} className={'text-indigo-600 hover:text-indigo-900'}>
+                                                    Ver       
+                                                </Link>
+                                                </td>
+                                            </tr>
+                                            )) : null}
+                                        </tbody>
+                                    </>
+                                }
                                 title={'Ultimas Ventas'}
                                 descripcion={'Visualizar las ultimas ventas realizadas'}
                             />
@@ -70,6 +214,58 @@ export default function Home() {
                         <div className={'col-span-1'}>
                             <TableComponent
                                 isMessage={true}
+                                children={
+                                    <>
+                                        <thead className="bg-gray-50">
+                                            <tr>
+                                            <th
+                                                scope="col"
+                                                className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                            >
+                                                ID
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            >
+                                                Realizada por
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            >
+                                                Pago con
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            >
+                                                Devuelta
+                                            </th>
+                                            <th scope="col" className="relative whitespace-nowrap py-3.5 pl-3 pr-4 sm:pr-6">
+                                                <span className="sr-only">Edit</span>
+                                            </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-200 bg-white">
+                                            {transactions ? transactions.map((transaction: any) => (
+                                            <tr key={transaction.id}>
+                                                <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-6">
+                                                {transaction.id}
+                                                </td>
+                                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">{transaction.commission}</td>
+                                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">{transaction.price}</td>
+                                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">{transaction.quantity}</td>
+                                                <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                                <Link to={`/${transaction.id}`} className={'text-indigo-600 hover:text-indigo-900'}>
+                                                    Ver       
+                                                </Link>
+                                                </td>
+                                            </tr>
+                                            )) : null}
+                                        </tbody>
+                                    </>
+                                }
                                 title={'Productos mas vendidos'}
                                 descripcion={'Visualizar Productos con mas demanda'}
                             />

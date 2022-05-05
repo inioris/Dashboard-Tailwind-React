@@ -7,6 +7,8 @@ import { Transition } from '@headlessui/react';
 interface INotificationProps {
     show?: boolean;
     changesShow?: any;
+    message?: string;
+    subMessage?: string;
 }
 
 
@@ -17,7 +19,7 @@ export default function Notification(props: INotificationProps) {
         {/* Global notification live region, render this permanently at the end of the document */}
         <div
           aria-live="assertive"
-          className="fixed inset-0 flex items-end px-4 py-6 pointer-events-none sm:p-6 sm:items-start"
+          className="absolute inset-0 flex items-end px-4 py-6 pointer-events-none sm:p-6 sm:items-start"
           
         >
           <div className="w-full flex flex-col items-center space-y-4 sm:items-end">
@@ -39,8 +41,8 @@ export default function Notification(props: INotificationProps) {
                       <CheckCircleIcons w='w-6' h='h-6' class='text-green-400' />
                     </div>
                     <div className="ml-3 w-0 flex-1 pt-0.5">
-                      <p className="text-sm font-medium text-gray-900">Successfully saved!</p>
-                      <p className="mt-1 text-sm text-gray-500">Anyone with a link can now view this file.</p>
+                      <p className="text-sm font-medium text-gray-900"> {props.message} </p>
+                      <p className="mt-1 text-sm text-gray-500"> { props.subMessage } </p>
                     </div>
                     <div className="ml-4 flex-shrink-0 flex">
                       <button

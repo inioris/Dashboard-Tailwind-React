@@ -40,14 +40,14 @@ const data: any = {
             link: '/proveedores',
         },
         {
-            section: 'Admin Categorias',
+            section: 'Servicios',
             icon: <EventsIcon />,
-            link: '/admin-category',
+            link: '/servicios',
         },
         {
             section: 'Administracion',
             icon: <EventsIcon />,
-            link: '/admin-category',
+            link: '/administracion',
         },
     ]
 };
