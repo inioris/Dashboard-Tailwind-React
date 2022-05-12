@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent} from "react";
+import { useStoreProducts } from '../../hooks/Products/StoreProvider';
+import { useProducts } from "../../hooks/Products";
 import { get } from 'lodash';
 import Input from "../../components/InputComponents";
 import {useStoreAuthLogin} from "../../hooks/AuthLogin/StoreProvider";
 import CancelIcons from "./../../icons/DeleteIcons";
-import { useProducts } from './../../hooks/Products';
-import { useStoreProducts } from './../../hooks/Products/StoreProvider';
 import ModalComponents from '../../components/ModalComponent';
 import { useCheckIn } from "../../hooks/CheckIn";
 import Notification from "../../components/Notification";
@@ -15,21 +15,13 @@ interface InewSaleListPrime {
     name: string;
     price: number;
     quantity: number;
+    productType: number;
     code: string;
     unit: number;
     unitPriceTotal: number;
 }
 
-const people: any = [
-    'Wade Cooper',
-    'Arlene McCoy',
-    'Devon Webb',
-    'Tom Cook',
-    'Tanya Fox',
-    'Hellen Schmidt',
-  ];
-
-function PointSale(){
+function PointSale() {
 
     const { authLogin } : any = useStoreAuthLogin();
     const { getAllProducts } : any = useProducts();
@@ -45,28 +37,24 @@ function PointSale(){
     const [checkDescApli, setCheckDescApli] = useState(false);
     const [checkRNC, setCheckRNC] = useState(false);
     const [listViewProducts, setListViewProducts] : any[] = useState([]);
-    const [inputSearch, setInputSearch] = useState('');
-    const [inputServiceAndProducts, setInputServiceAndProducts] = useState('');
+    // const [inputSearch, setInputSearch] = useState('');
+    // const [inputServiceAndProducts, setInputServiceAndProducts] = useState('');
     const [receipt, setReceipt] = useState(false);
     const [discounts, setDiscounts] = useState(0);
     const [rnc, setRNC] = useState('');
     const [taxes, setTaxes] = useState(0);
     const [showNotifications, setShowNotification] = useState(false);
 
-    const [selectedPerson, setSelectedPerson] = useState(people[0])
+    const [selectedProduct, setSelectedProduct] = useState(products[0])
     const [query, setQuery] = useState('')
 
-  const filteredPeople = query === '' ? people : people.filter((person: any) => {
-          return person.toLowerCase().includes(query.toLowerCase())
-     });
-
-    useEffect(function updatedPaymentCashier() {
+    useEffect(() => {
         listViewProducts.map((item: InewSaleListPrime) => {
-            setPayment(payment + item.unitPriceTotal)
+            setPayment(payment + item.unitPriceTotal);
         });
     }, [listViewProducts]);
 
-    const onAddProductsList = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    /*const onAddProductsList = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         e.preventDefault();
         const {value} = e.target;
         setInputSearch(value);
@@ -86,10 +74,33 @@ function PointSale(){
                 }
             });
         }
+    }*/
+
+    const filteredProducts = query === '' ? products : products.filter((product: any) => {
+        return product.name.toLowerCase().includes(query.toLowerCase())
+    });
+
+    const onClickProductsList = (id: number | string, account?: number | string) => {
+        if(id){
+            products.find((item: any) => {
+                if(Number(item.id) === Number(id)) {
+                    console.log(item, 'aqui');
+                    setListViewProducts([...listViewProducts, {
+                        id: item.id,
+                        name: item.name,
+                        productType: Number(item.productType.id),
+                        price: item.price,
+                        code: item.code,
+                        unit: 1,
+                        unitPriceTotal: Number(item.price),
+                    }]);
+                    setQuery('');
+                }
+            });
+        }
     }
 
     const moreUnity = (key?: any) => {
-        console.log(key, 'mas');
         const dataListProducts: any = listViewProducts.find((item: any, index: number) => index === key);
 
         if(dataListProducts){
@@ -99,7 +110,7 @@ function PointSale(){
 
         setListViewProducts([...listViewProducts]);
     }
-    
+
     const lessUnity = (key?: any) => {
         const product: any = listViewProducts
             .find((item: any, index: number) => index === key);
@@ -107,7 +118,7 @@ function PointSale(){
                 product.unit = Number(product.unit) - 1;
                 product.unitPriceTotal = Number(product.unit) * Number(product.price);
             }
-    
+
             setListViewProducts([...listViewProducts]);
     }
 
@@ -118,6 +129,7 @@ function PointSale(){
         listViewProducts.map((item: any) => {
             return listProductsSale.push({
                 "product": item.id,
+                "productType": item.productType,
                 "quantity": item.unit,
                 "createdAt": new Date(),
                 "updatedAt": new Date(),
@@ -137,7 +149,7 @@ function PointSale(){
             "updatedAt": new Date(),
             "listOfProductSale": listProductsSale
         };
-        
+
         await saveCheckIn(purchase);
         setReceipt(!receipt);
         setListViewProducts([]);
@@ -146,7 +158,6 @@ function PointSale(){
         setRNC('');
         setTaxes(0);
         setPaymentMoney(0);
-        setInputSearch('');
     }
 
     return (
@@ -155,20 +166,20 @@ function PointSale(){
                 {
                     showNotifications ?
                         <div className="col-span-12" style={{ zIndex: '9999' }}>
-                            <Notification 
+                            <Notification
                                 message={'Guardo con Exito!'}
                                 subMessage={'Gracias por su Compra.'}
-                                show={showNotifications} 
+                                show={showNotifications}
                                 changesShow={() => setShowNotification(!showNotifications)} />
                         </div> : null
                 }
-                
+
                 <div className={'bg-white p-1 rounded sm:col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-8 2xl:col-span-8'}>
                         <div className={'grid grid-cols-1 pl-4 pt-4'}>
                             <span className={'text-2xl pl-2'} style={{ borderLeft: '5px solid #0415FA' }}> Lista de Compras </span>
                         </div>
                         <div className={'grid grid-cols-2 gap-4 py-4'}>
-                            <div className={'pl-2 col-span-1'}>
+                            {/* <div className={'pl-2 col-span-1'}>
                                 <Input
                                     type="text"
                                     max={4}
@@ -178,32 +189,40 @@ function PointSale(){
                                     onChange={onAddProductsList}
                                     wrapperClass={"mt-1 focus:ring-indigo-500 p-2 pl-3 2xl:text-xl focus:border-indigo-500 block w-full border shadow-sm sm:text-sm border-gray-300 rounded-md"}
                                 />
-                            </div>
-                            <div className={'col-span-1 w-full'}>
-                                <div className={'absolute'}>
-                                    <Combobox value={selectedPerson} onChange={setSelectedPerson}>
-                                        <Combobox.Input 
-                                            onChange={(event) => setQuery(event.target.value)} 
-                                            className={'mt-1 mb-2 focus:ring-indigo-500 p-2 pl-3 2xl:text-xl focus:border-indigo-500 block w-full border shadow-sm sm:text-sm border-gray-300 rounded-md'}
-                                        />
-                                        <Combobox.Options 
-                                            className={'w-full bg-white p-4'}
-                                        >
-                                            {filteredPeople.map((person : any) => (
-                                            <Combobox.Option 
-                                                key={person} 
-                                                value={person} 
-                                                className={'p-2 rounded-md hover:bg-gray-100'}
-                                            >
-                                               <span> {person} </span> 
-                                            </Combobox.Option>
-                                            ))}
-                                        </Combobox.Options>
-                                    </Combobox>
+                            </div> */}
+                            <div className={'col-span-1'}>
+                                <div className={'pb-2 pt-2 w-full'}>
+                                        <Combobox value={selectedProduct} onChange={setSelectedProduct}>
+                                            <Combobox.Input
+                                                onChange={(event) => setQuery(event.target.value)}
+                                                className={'mt-1 mb-2 bg-gray-50 w-full focus:ring-indigo-500 p-2 pl-3 2xl:text-xl focus:border-indigo-500 block border shadow-sm sm:text-sm border-gray-300 rounded-md'}
+                                            />
+
+                                                    <Combobox.Options
+                                                    className={'bg-white absolute p-2 border shadow rounded'}
+                                                >
+
+                                                    {filteredProducts.slice(0, 5).map((product : any) => (
+
+                                                        <Combobox.Option
+                                                            key={product.id}
+                                                            onClick={() => onClickProductsList(product.id)}
+                                                            value={product.id}
+                                                            style={{ cursor: 'pointer' }}
+                                                            className={'p-2 sticky rounded-md hover:bg-gray-100'}
+                                                        >
+                                                        <span> {product.name} </span>
+                                                    </Combobox.Option>
+
+                                                    ))}
+
+                                                </Combobox.Options>
+                                        </Combobox>
                                 </div>
-                             </div>
+
+                            </div>
                         </div>
-                        
+
                         <div className="overflow-scroll shadow h-96 ring-1 ring-black ring-opacity-5 sm:-mx-6 md:mx-0">
                             <table className="min-w-full divide-y divide-gray-300">
                                 <thead className="bg-gray-100">
@@ -212,7 +231,7 @@ function PointSale(){
                                             Codigo
                                         </th>
                                         <th scope="col" className={"px-3 py-3.5 text-left text-sm font-semibold text-gray-900"}>
-                                            Nombre Producto
+                                            Nombre
                                         </th>
                                         <th scope="col" className={"px-3 py-3.5 text-left text-sm font-semibold text-gray-900"}>
                                             Precio
@@ -237,7 +256,7 @@ function PointSale(){
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                     <button className='rounded-full' type={'button'} onClick={() => moreUnity(key)}>+</button>
                                                         <label>&nbsp; { product.unit } &nbsp;</label>
-                                                    <button className='rounded-full' type={'button'} onClick={() => lessUnity(key)} disabled={product.unit === 1 ? true : false}>-</button>
+                                                    <button className='rounded-full' type={'button'} onClick={() => lessUnity(key)} disabled={product.unit === 1}>-</button>
                                                 </td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.unitPriceTotal}</td>
                                                 <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
@@ -266,10 +285,10 @@ function PointSale(){
                             </span>
                         </div>
                         <div className={'gap-2'}>
-                            <Input 
+                            <Input
                                  type="number"
                                  name="paymentMoney"
-                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                     e.preventDefault();
                                     const {value} = e.target;
                                     setPaymentMoney(Number(value));
@@ -289,15 +308,15 @@ function PointSale(){
                             <div className={'col-span-1 pl-3'}>
                                 <div className={'grip grip-cols-6 pt-10'}>
                                     <input name={'checkDescApli'} type={'checkbox'} className={'border border-gray-300'} defaultChecked={checkDescApli} onChange={() => setCheckDescApli(!checkDescApli)}  /> Aplicar Descuento
-                                </div> 
+                                </div>
                             </div>
                             <div className={'col-span-1'}>
                                 {
                                     checkDescApli ?
-                                        <Input 
+                                        <Input
                                         type="number"
                                         name="paymentDesc"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                             e.preventDefault();
                                             const {value} = e.target;
                                             setDiscounts(Number(value));
@@ -313,15 +332,15 @@ function PointSale(){
                             <div className={'col-span-1 pl-3'}>
                                 <div className={'grip grip-cols-6 pt-10'}>
                                     <input name={'checkRNC'} type={'checkbox'} className={'border border-gray-300'} defaultChecked={checkRNC} onChange={() => setCheckRNC(!checkRNC)}  /> RNC
-                                </div> 
+                                </div>
                             </div>
                             <div className={'col-span-3'}>
                                 {
                                     checkRNC ?
-                                        <Input 
+                                        <Input
                                         type="number"
                                         name="rnc"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                             e.preventDefault();
                                             const {value} = e.target;
                                             setRNC(value);
@@ -336,21 +355,21 @@ function PointSale(){
                         <div className={'grid pt-16'}>
                             <button
                                 type="button"
-                                disabled={payment < paymentMoney && (Number(paymentMoney) - Number(payment)) <= 0  ? true : false}
+                                disabled={Number(payment) < Number(paymentMoney) && (Number(paymentMoney) - Number(payment)) <= 0}
                                 onClick={() => setReceipt(!receipt)}
                                 className={`inline-flex ${payment < paymentMoney ? 'bg-green-500 hover:bg-green-700' : 'bg-gray-300'} justify-center py-4 px-4 2xl:py-4 2xl:px-8 border border-transparent shadow-sm text-sm xl:text-2xl 2xl:text-2xl rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
                             > Realizar Pago </button>
                         </div>
                     </div>
                 </div>
-                
-                <ModalComponents 
-                    title={'Detalles de Compra'} 
+
+                <ModalComponents
+                    title={'Detalles de Compra'}
                     closeFormModal={() => setReceipt(!receipt)}
                     openForm={receipt}
                     size={'600px'}
                 >
-                    <ReceiptPayment 
+                    <ReceiptPayment
                         list={listViewProducts}
                         subTotal={payment}
                         discounts={discounts}
@@ -361,6 +380,6 @@ function PointSale(){
             </div>
         </>
     )
-};
+}
 
 export default PointSale;

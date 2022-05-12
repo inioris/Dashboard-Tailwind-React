@@ -3,6 +3,8 @@ import GlobalStore from './hooks/globalStore';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DashboardLayout from "./dashboard/layout";
 import Home from './view/Home';
+import Inventoy from './view/Inventory';
+import ProductsAndServices from './view/ProductsAndServices';
 import PointSale from './view/PointSale';
 import Login from './view/Login';
 import { setAuthorizationToken } from "./utils/setAuthorizationToken";
@@ -26,6 +28,8 @@ const App: FC = () => {
                             <Routes>
                               <Route path="/" element={ <Home /> } />
                               <Route path="/nueva-venta" element={<PointSale />} />
+                              <Route path="/productos-y-servicios" element={<ProductsAndServices />} />
+                              <Route path='/inventoy' element={<Inventoy />} />
                             </Routes>
                         </DashboardLayout>
                       </BrowserRouter>

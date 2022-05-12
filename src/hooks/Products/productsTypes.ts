@@ -9,7 +9,7 @@ function ProductsTypes(state: any, action: any){
         case TypesProducts.SAVE_PRODUCTS:
         case TypesProducts.GET_PRODUCTS:
             return {
-                ...state, users: payload.users
+                ...state, products: payload.products
             };
         default:
             return state;

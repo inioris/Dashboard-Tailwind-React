@@ -1,3 +1,5 @@
+import Input from "../../components/InputComponents";
+  
   interface IDataComponents {
       data?: any[];
       isMessage?: boolean;
@@ -5,16 +7,23 @@
       message?: string;
       children: any;
       descripcion?: string;
+      inputSearch?: boolean;
   }
   
   export default function TableComponent(props: IDataComponents) {
       console.log(props.data);
+
+      const onSearchProductsServices = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        e.preventDefault();
+        const {value} = e.target;
+    }
     return (
       <div className="px-4 sm:px-6 lg:px-8">
         
         {
             props.isMessage ?
                 <>
+                  <div className={'grid grid-cols-2 gap-4'}>
                     <div className="sm:flex sm:items-center">
                         <div className="sm:flex-auto">
                             <h1 className="text-xl text-gray-900">
@@ -27,8 +36,22 @@
                                     props.descripcion
                                 }
                             </p>
-                        </div>
+                        </div>                 
                     </div>
+                    {
+                          props.inputSearch ?
+                          <div>
+                            <Input
+                              type="text"
+                              max={20}
+                              placeholder={'Buscar Productos o Servicios'}
+                              name={"searchProductsServices"}
+                              onChange={onSearchProductsServices}
+                              wrapperClass={"mt-1 focus:ring-indigo-500 p-2 pl-3 2xl:text-xl focus:border-indigo-500 block w-full border shadow-sm sm:text-sm border-gray-300 rounded-md"}
+                            />
+                          </div> : null
+                        } 
+                  </div> 
                 </> 
                 : null
         }

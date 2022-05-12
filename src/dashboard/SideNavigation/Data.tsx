@@ -12,17 +12,17 @@ const data: any = {
             icon: <EventsIcon />,
             link: '/nueva-venta',
         },
-        {
-            section: 'Ventas',
-            icon: <EventsIcon />,
-            link: '/agendas',
-        },
+        // {
+        //     section: 'Ventas',
+        //     icon: <EventsIcon />,
+        //     link: '/agendas',
+        // },
     ],
     mantenimiento: [
         {
-            section: 'Usuarios',
+            section: 'Producto y Servicio',
             icon: <EventsIcon />,
-            link: '/usuarios',
+            link: '/productos-y-servicios',
         },
         {
             section: 'Facturas y servicios',
@@ -30,25 +30,20 @@ const data: any = {
             link: '/faturas-y-servicios',
         },
         {
-            section: 'Nuevos Productos',
+            section: 'Inventario',
             icon: <EventsIcon />,
-            link: '/faturas-y-servicios',
+            link: '/inventoy',
         },
-        {
-            section: 'Proveedores',
-            icon: <EventsIcon />,
-            link: '/proveedores',
-        },
-        {
-            section: 'Servicios',
-            icon: <EventsIcon />,
-            link: '/servicios',
-        },
-        {
-            section: 'Administracion',
-            icon: <EventsIcon />,
-            link: '/administracion',
-        },
+        // {
+        //     section: 'Proveedores',
+        //     icon: <EventsIcon />,
+        //     link: '/proveedores',
+        // },
+        // {
+        //     section: 'Administracion',
+        //     icon: <EventsIcon />,
+        //     link: '/administracion',
+        // },
     ]
 };
 

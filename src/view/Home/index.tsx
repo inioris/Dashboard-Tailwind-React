@@ -151,8 +151,8 @@ export default function Home() {
                     <hr className={'sm:pb-2 md:pb-2 xl:pb-3 2xl:pb-3'} />
                     {/* show data components */ }
                     
-                    <div className={'grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2'}>
-                        <div className={'col-span-1'}>
+                    <div className={'grid'}>
+                    
                             <TableComponent
                                 isMessage={true}
                                 children={
@@ -210,66 +210,7 @@ export default function Home() {
                                 title={'Ultimas Ventas'}
                                 descripcion={'Visualizar las ultimas ventas realizadas'}
                             />
-                        </div>
-                        <div className={'col-span-1'}>
-                            <TableComponent
-                                isMessage={true}
-                                children={
-                                    <>
-                                        <thead className="bg-gray-50">
-                                            <tr>
-                                            <th
-                                                scope="col"
-                                                className="whitespace-nowrap py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                            >
-                                                ID
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                            >
-                                                Realizada por
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                            >
-                                                Pago con
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                            >
-                                                Devuelta
-                                            </th>
-                                            <th scope="col" className="relative whitespace-nowrap py-3.5 pl-3 pr-4 sm:pr-6">
-                                                <span className="sr-only">Edit</span>
-                                            </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-gray-200 bg-white">
-                                            {transactions ? transactions.map((transaction: any) => (
-                                            <tr key={transaction.id}>
-                                                <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-6">
-                                                {transaction.id}
-                                                </td>
-                                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">{transaction.commission}</td>
-                                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">{transaction.price}</td>
-                                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">{transaction.quantity}</td>
-                                                <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                <Link to={`/${transaction.id}`} className={'text-indigo-600 hover:text-indigo-900'}>
-                                                    Ver       
-                                                </Link>
-                                                </td>
-                                            </tr>
-                                            )) : null}
-                                        </tbody>
-                                    </>
-                                }
-                                title={'Productos mas vendidos'}
-                                descripcion={'Visualizar Productos con mas demanda'}
-                            />
-                        </div>
+                        
                     </div>
                     {/* end show data components */ }
             </div>

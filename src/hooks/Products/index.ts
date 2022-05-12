@@ -16,7 +16,7 @@ export function useProducts() {
             })
         },
         async saveProducts(data: any){
-            await postAll(`${process.env.REACT_API_URL}/products`, data).then(async (res: any) => {
+            await postAll(`${urlApi}/products`, data).then(async (res: any) => {
                 if (res.status === 200){
                     const products: any = await getId(`${urlApi}/products`);
                     dispatch({

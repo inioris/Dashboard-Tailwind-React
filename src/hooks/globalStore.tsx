@@ -3,7 +3,8 @@ import StoreProviderUsers from './Users/StoreProvider';
 import StoreProviderStatusProducts from './StatusProducts/StoreProvider';
 import StoreProviderSale from './Sale/StoreProvider';
 import StoreProviderCheckIn from './CheckIn/StoreProvider';
-import StoreProviderAuthLogin from './AuthLogin/StoreProvider';
+import StoreProviderServices from './Services/StoreProvider';
+import StoreProviderCategory from './Category/StoreProvider';
 
 
 
@@ -15,9 +16,13 @@ export default function GlobalStore({children}: any) {
                             <StoreProviderProducts>
                                 <StoreProviderUsers>
                                     <StoreProviderStatusProducts>
-                                        {
-                                            children
-                                        }
+                                        <StoreProviderServices>
+                                            <StoreProviderCategory>
+                                                {
+                                                    children
+                                                }
+                                            </StoreProviderCategory>
+                                        </StoreProviderServices>
                                     </StoreProviderStatusProducts>
                                 </StoreProviderUsers>
                             </StoreProviderProducts>
