@@ -30,7 +30,7 @@ export default function Inventoy() {
           price: `$ ${Number(listServices) + Number(moneyBuyAll) }.00`,
           color: `Detalles de tus Ventas ${date}`,
           size: `${listProductsAndServices.length} L`,
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/checkout-page-07-product-01.jpg',
+          imageSrc: 'https://escuela-emprendedores.alegra.com/wp-content/uploads/2018/08/inventario.jpg',
           imageAlt: 'Front of zip tote bag with white canvas, white handles, and black drawstring top.',
         },
         // More products...

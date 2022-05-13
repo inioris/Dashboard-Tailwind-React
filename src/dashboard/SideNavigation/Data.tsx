@@ -27,7 +27,7 @@ const data: any = {
         {
             section: 'Facturas y servicios',
             icon: <EventsIcon />,
-            link: '/faturas-y-servicios',
+            link: '/facturas',
         },
         {
             section: 'Inventario',
