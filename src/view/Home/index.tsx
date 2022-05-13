@@ -5,100 +5,6 @@ import TableComponent from '../../components/TablaComponent';
 import { useCheckIn } from './../../hooks/CheckIn';
 import { useStoreCheckIn } from './../../hooks/CheckIn/StoreProvider';
 
-const transactions: any = [
-    {
-      id: 'AAPS0L',
-      company: 'Chase & Co.',
-      share: 'CAC',
-      commission: '+$4.37',
-      price: '$3,509.00',
-      quantity: '12.00',
-      netAmount: '$4,397.00',
-    },
-    {
-        id: 'AAPS0L',
-        company: 'Chase & Co.',
-        share: 'CACRRR',
-        commission: '+$4.37',
-        price: '$3,509.00',
-        quantity: '12.00',
-        netAmount: '$4,397.00',
-      },
-      {
-        id: 'AAPS0L',
-        company: 'Chase & Co.',
-        share: 'CACAA',
-        commission: '+$4.37',
-        price: '$3,509.00',
-        quantity: '12.00',
-        netAmount: '$4,397.00',
-      },
-      {
-        id: 'AAPS0L',
-        company: 'Chase & Co.',
-        share: 'CACHH',
-        commission: '+$4.37',
-        price: '$3,509.00',
-        quantity: '12.00',
-        netAmount: '$4,397.00',
-      },
-      {
-        id: 'AAPS0L',
-        company: 'Chase & Co.',
-        share: 'CACLLL',
-        commission: '+$4.37',
-        price: '$3,509.00',
-        quantity: '12.00',
-        netAmount: '$4,397.00',
-      },
-      {
-        id: 'AAPS0L',
-        company: 'Chase & Co.',
-        share: 'CACVVVV',
-        commission: '+$4.37',
-        price: '$3,509.00',
-        quantity: '12.00',
-        netAmount: '$4,397.00',
-      },
-      {
-          id: 'AAPS0L',
-          company: 'Chase & Co.',
-          share: 'CACXCXX',
-          commission: '+$4.37',
-          price: '$3,509.00',
-          quantity: '12.00',
-          netAmount: '$4,397.00',
-        },
-        {
-          id: 'AAPS0L',
-          company: 'Chase & Co.',
-          share: 'CACLOLD',
-          commission: '+$4.37',
-          price: '$3,509.00',
-          quantity: '12.00',
-          netAmount: '$4,397.00',
-        },
-        {
-          id: 'AAPS0L',
-          company: 'Chase & Co.',
-          share: 'CACGFDS',
-          commission: '+$4.37',
-          price: '$3,509.00',
-          quantity: '12.00',
-          netAmount: '$4,397.00',
-        },
-        {
-          id: 'AAPS0L',
-          company: 'Chase & Co.',
-          share: 'CACTREW',
-          commission: '+$4.37',
-          price: '$3,509.00',
-          quantity: '12.00',
-          netAmount: '$4,397.00',
-        },
-    // More transactions...
-  ];
-
 const projects = [
     { name: 'Cuadre de Caja', initials: 'CC', href: '#', members: 16, bgColor: 'bg-pink-600' },
     { name: 'Avastecer Productos', initials: 'AP', href: '#', members: 12, bgColor: 'bg-purple-600' },
@@ -196,7 +102,7 @@ export default function Home() {
                                                 </td>
                                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">{get(transaction, 'user.name', '')}</td>
                                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">${transaction.totalToPay}</td>
-                                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">${transaction.payWith}</td>
+                                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">${transaction.moneyBack}</td>
                                                 <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                                 <Link to={`/${transaction.id}`} className={'text-indigo-600 hover:text-indigo-900'}>
                                                     Ver       

@@ -19,12 +19,14 @@ export default function ProductsAndServices() {
     const { getAllProducts, saveProducts, updatedProducts } : any = useProducts();
     //const { getAllCategory } : any = useCategory();
     const [disable, setDisable] = useState(true);
+    console.log(authLogin, 'aqui');
     const [updated, setUpdated] = useState(false);
     const [deleted, setDeleted] = useState(false);
     const [idd, setId] = useState(0);
     const [ formProducts, setFormProducts ] = useState({
         name: '',
         description: '',
+        statusProduct: 1,
         quantity: 0,
         price: 0,
         priceBucharse: 0,
@@ -59,6 +61,8 @@ export default function ProductsAndServices() {
         if(formProducts.productType == 1){
             const createProduct : any = {
                 name: formProducts.name,
+                user: authLogin.idUser,
+                statusProduct: formProducts.statusProduct,
                 quantity: Number(formProducts.quantity),
                 price: Number(formProducts.price),
                 priceBurchase: Number(formProducts.priceBucharse),
@@ -70,6 +74,8 @@ export default function ProductsAndServices() {
         }else {
             const createService : any = {
                 name: formProducts.name,
+                user: authLogin.idUser,
+                statusProduct: formProducts.statusProduct,
                 price: Number(formProducts.price),
                 productType: Number(formProducts.productType),
                 enabled: formProducts.enabled,
@@ -81,6 +87,7 @@ export default function ProductsAndServices() {
             name: '',
             description: '',
             quantity: 0,
+            statusProduct: 1,
             price: 0,
             priceBucharse: 0,
             productType: 1,
@@ -95,6 +102,7 @@ export default function ProductsAndServices() {
         if(formProducts.productType == 1){
             const createUpdated : any = {
                 name: formProducts.name,
+                user: authLogin.idUser,
                 quantity: Number(formProducts.quantity),
                 price: Number(formProducts.price),
                 priceBurchase: Number(formProducts.priceBucharse),
@@ -106,6 +114,7 @@ export default function ProductsAndServices() {
         }else {
             const createUpdated : any = {
                 name: formProducts.name,
+                user: authLogin.idUser,
                 price: Number(formProducts.price),
                 productType: Number(formProducts.productType),
                 enabled: formProducts.enabled,
@@ -117,6 +126,7 @@ export default function ProductsAndServices() {
         setFormProducts({
             name: '',
             description: '',
+            statusProduct: 1,
             quantity: 0,
             price: 0,
             priceBucharse: 0,
@@ -226,6 +236,7 @@ export default function ProductsAndServices() {
                                                                             name: product.name,
                                                                             description: product.description,
                                                                             quantity: product.quantity,
+                                                                            statusProduct: 1,
                                                                             price: product.prince,
                                                                             priceBucharse: product.priceBucharse,
                                                                             productType: product.productType?.id,

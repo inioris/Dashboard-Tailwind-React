@@ -1,7 +1,16 @@
+import { useEffect } from 'react';
 import { useToggle } from "../Provider/Context";
+import { useAuthLogin } from "../../hooks/AuthLogin";
+import { useStoreAuthLogin } from "../../hooks/AuthLogin/StoreProvider";
 
 export default function TopNavigation() {
     const { toggle } : any = useToggle();
+    const { getAuthLogin } = useAuthLogin();
+
+    useEffect(() => {
+        getAuthLogin();
+    }, []);
+
     return (
         <div className="h-16 md:h-20 shadow bg-white items-center relative z-10">
             <div className="flex flex-center flex-col h-full justify-center mx-auto relative px-3 text-white z-10">

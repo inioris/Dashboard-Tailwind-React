@@ -18,30 +18,30 @@ const App: FC = () => {
   // console.log(window?.location)
   return (
       <>
-        <StoreProviderAuthLogin>
-            {
-                global.window?.localStorage.AuthToken ?
-                  (<>
-                    <GlobalStore>
-                      <BrowserRouter>
-                        <DashboardLayout>
-                            <Routes>
-                              <Route path="/" element={ <Home /> } />
-                              <Route path="/nueva-venta" element={<PointSale />} />
-                              <Route path="/productos-y-servicios" element={<ProductsAndServices />} />
-                              <Route path='/inventoy' element={<Inventoy />} />
-                            </Routes>
-                        </DashboardLayout>
-                      </BrowserRouter>
-                    </GlobalStore>
-                  </>):
-                  <BrowserRouter>
-                     <Routes>
-                       <Route path="/login" element={ <Login />} />
-                     </Routes>
-                  </BrowserRouter>
-            }
-        </StoreProviderAuthLogin>
+          <StoreProviderAuthLogin>
+              {
+                  global.window?.localStorage.AuthToken ?
+                    (<>
+                      <GlobalStore>
+                        <BrowserRouter>
+                          <DashboardLayout>
+                              <Routes>
+                                <Route path="/" element={ <Home /> } />
+                                <Route path="/nueva-venta" element={<PointSale />} />
+                                <Route path="/productos-y-servicios" element={<ProductsAndServices />} />
+                                <Route path='/inventoy' element={<Inventoy />} />
+                              </Routes>
+                          </DashboardLayout>
+                        </BrowserRouter>
+                      </GlobalStore>
+                    </>):
+                    <BrowserRouter>
+                      <Routes>
+                        <Route path="/login" element={ <Login />} />
+                      </Routes>
+                    </BrowserRouter>
+              }
+          </StoreProviderAuthLogin>
         </>
   );
 }

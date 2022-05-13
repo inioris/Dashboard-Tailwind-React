@@ -6,6 +6,7 @@ import Input from "../../components/InputComponents";
       title?: string;
       message?: string;
       children: any;
+      classAditional?: string;
       descripcion?: string;
       inputSearch?: boolean;
   }
@@ -18,7 +19,7 @@ import Input from "../../components/InputComponents";
         const {value} = e.target;
     }
     return (
-      <div className="px-4 sm:px-6 lg:px-8">
+      <div className={`${props.classAditional}`}>
         
         {
             props.isMessage ?

@@ -3,6 +3,7 @@ import { TypesAuthLogin } from './AuthLoginTypes';
 import jwt from 'jwt-decode';
 import urlApi from "../../dataApi/urlApi";
 import { postAll } from "../globalMethod";
+import { setAuthorizationToken } from "../../utils/setAuthorizationToken";
 
 interface IUsersLogin {
     username: string;
@@ -10,11 +11,11 @@ interface IUsersLogin {
 }
 
 export interface IDataUsersLoggers {
-    "idUser": number | string;
+    "id": number | string;
     "name": string;
-    // "rol": number | string;
-    // "authorizedBy": number | string;
-    "username": string;
+    "rol": number | string;
+    "authorizationBy": number | string;
+    "user": string;
     "email": string;
 }
 
@@ -25,10 +26,12 @@ export function useAuthLogin() {
         async postAuthLogin(dataUsers: IUsersLogin){
             const authLogin: any = (await postAll(`${urlApi}/login`, dataUsers)).data;
             localStorage.setItem('AuthToken', authLogin);
+            setAuthorizationToken(authLogin);
         },
-        async getAuthLogin() {
+        getAuthLogin() {
             if (global.window?.localStorage.AuthToken){
                 const authLogin : any = localStorage.getItem('AuthToken');
+                console.log(authLogin, 'no');
                 dispatch({
                     type: TypesAuthLogin.GET_AUTHLOGIN,
                     payload: {
