@@ -1,25 +1,44 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import { get, isEmpty } from 'lodash';
 import TableComponent from '../../components/TablaComponent';
 import { useCheckIn } from './../../hooks/CheckIn';
 import { useStoreCheckIn } from './../../hooks/CheckIn/StoreProvider';
 
-const projects = [
-    { name: 'Cuadre de Caja', initials: 'CC', href: '#', members: 16, bgColor: 'bg-pink-600' },
-    { name: 'Avastecer Productos', initials: 'AP', href: '#', members: 12, bgColor: 'bg-purple-600' },
-    { name: 'Inventario', initials: 'I', href: '#', members: 16, bgColor: 'bg-yellow-500' },
-    { name: 'Ventas del Dia', initials: 'VD', href: '#', members: 8, bgColor: 'bg-green-500' },
-  ];
 
 export default function Home() {
 
     const { getAllCheckIn } : any = useCheckIn();
     const { checkIn } : any = useStoreCheckIn();
+    const [cuadre, setCuadre] = useState(0);
+    const [saleLength, setSaleLength] = useState(0);
+    const [productQuantity, setProductQuantity] = useState(0);
 
     useEffect(() => {
         getAllCheckIn();
     }, []);
+
+    useEffect(() => {
+        let data = 0;
+        let dataLength = 0;
+        let productQuantiy = 0;
+        const date = moment(new Date()).format("YYYY-MM-DD")
+        checkIn.map((item: any) => {
+            if(moment(item.createdAt).format("YYYY-MM-DD") ===  moment(date).format("YYYY-MM-DD")){
+                data = data + Number(item.totalToPay);
+                dataLength = dataLength + 1;
+                productQuantiy = productQuantiy + Number(item.quantity);
+            }
+        })
+    }, [checkIn]);
+
+    const projects = [
+        { name: 'Cuadre de Caja', initials: 'CC', href: '#', members: `${cuadre}`, bgColor: 'bg-pink-600' },
+        { name: 'Ventas en el Dia', initials: 'VD', href: '#', members: `${saleLength}`, bgColor: 'bg-purple-600' },
+        { name: 'Inventario', initials: 'I', href: '#', members: 16, bgColor: 'bg-yellow-500' },
+        { name: 'Productos y Servicios Vendidos', initials: 'PS', href: '#', members: `${productQuantity}`, bgColor: 'bg-green-500' },
+      ];
 
     return (
         <>
