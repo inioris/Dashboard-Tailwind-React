@@ -15,7 +15,7 @@ export default function Inventoy() {
 
     const { checkIn } : any = useStoreCheckIn();
     const { sale } : any = useStoreSale();
-    const [date, setDate] = useState(`${moment(new Date()).format("YYYY-MM-DD")}`);
+    const [date, setDate] = useState(`${moment().format("YYYY-MM-DD")}`);
     const [listProducts, setListProducts] = useState(0);
     const [moneyBuyAll, setMoneyBuyAll] = useState(0);
     const [listCapitalBurchase, setCapitalBurchase] = useState(0);
@@ -183,7 +183,7 @@ export default function Inventoy() {
                         <div className="mt-1">
                             <input
                             type="date"
-                            max={`${moment(new Date()).format("YYYY-MM-DD")}`}
+                            max={`${moment().format("YYYY-MM-DD")}`}
                             id="dateConsultin"
                             value={date}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {

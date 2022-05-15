@@ -106,7 +106,7 @@ export default function FactoryView(){
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-200 bg-white">
-                                            { !isEmpty(checkIn) ? [...checkIn].reverse().slice(0, 10).map((transaction: any) => (
+                                            { !isEmpty(checkIn) ? [...checkIn].reverse().slice(0, 7).map((transaction: any) => (
                                             <tr key={transaction.id}>
                                                 <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-6">
                                                 {transaction.id}

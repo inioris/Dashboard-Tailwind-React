@@ -20,17 +20,22 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-        let data = 0;
-        let dataLength = 0;
-        let productQuantiy = 0;
-        const date = moment(new Date()).format("YYYY-MM-DD")
+        let data: number = 0;
+        let dataLength: number= 0;
+        let productQuantiy: number = 0;
+        const date = moment().subtract(1, 'days').format("YYYY-MM-DD");
+        
         checkIn.map((item: any) => {
-            if(moment(item.createdAt).format("YYYY-MM-DD") ===  moment(date).format("YYYY-MM-DD")){
+            if(moment(item.createdAt).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")){
+                console.log(item, 'aq');
                 data = data + Number(item.totalToPay);
                 dataLength = dataLength + 1;
                 productQuantiy = productQuantiy + Number(item.quantity);
             }
-        })
+        });
+        setCuadre(data);
+        setSaleLength(dataLength);
+        setProductQuantity(productQuantity);
     }, [checkIn]);
 
     const projects = [
@@ -56,7 +61,7 @@ export default function Home() {
                                     <Link to={`/${project.href}`} className="text-gray-900 font-medium hover:text-gray-600">
                                         {project.name}
                                     </Link>
-                                    <p className="text-gray-500">{project.members} Members</p>
+                                    <p className="text-gray-500"> $ {project.members}</p>
                                 </div>
                                 <div className="flex-shrink-0 pr-2">
                                     <button
@@ -94,6 +99,12 @@ export default function Home() {
                                                 scope="col"
                                                 className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
+                                                 Realizada
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="whitespace-nowrap px-2 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            >
                                                  Realizada por
                                             </th>
                                             <th
@@ -119,6 +130,7 @@ export default function Home() {
                                                 <td className="whitespace-nowrap py-2 pl-4 pr-3 text-sm text-gray-500 sm:pl-6">
                                                 {transaction.id}
                                                 </td>
+                                                <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">{moment(transaction.createdAt).format("YYYY-MM-DD")}</td>
                                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">{get(transaction, 'user.name', '')}</td>
                                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">${transaction.totalToPay}</td>
                                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">${transaction.moneyBack}</td>

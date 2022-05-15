@@ -2,6 +2,7 @@ import { useState, useEffect, ChangeEvent} from "react";
 import { useStoreProducts } from '../../hooks/Products/StoreProvider';
 import { useProducts } from "../../hooks/Products";
 import { get } from 'lodash';
+import moment from "moment";
 import Input from "../../components/InputComponents";
 import {useStoreAuthLogin} from "../../hooks/AuthLogin/StoreProvider";
 import CancelIcons from "./../../icons/DeleteIcons";
@@ -131,8 +132,6 @@ function PointSale() {
                 "product": item.id,
                 "productType": item.productType,
                 "quantity": item.unit,
-                "createdAt": new Date(),
-                "updatedAt": new Date(),
             });
         })
 
@@ -145,8 +144,6 @@ function PointSale() {
             "totalToPay": payment,
             "applyReturned": 1,
             "rnc": rnc,
-            "createdAt": new Date(),
-            "updatedAt": new Date(),
             "listOfProductSale": listProductsSale
         };
 
@@ -231,6 +228,9 @@ function PointSale() {
                                             Codigo
                                         </th>
                                         <th scope="col" className={"px-3 py-3.5 text-left text-sm font-semibold text-gray-900"}>
+                                            Tipo
+                                        </th>
+                                        <th scope="col" className={"px-3 py-3.5 text-left text-sm font-semibold text-gray-900"}>
                                             Nombre
                                         </th>
                                         <th scope="col" className={"px-3 py-3.5 text-left text-sm font-semibold text-gray-900"}>
@@ -251,10 +251,11 @@ function PointSale() {
                                                 <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
                                                     {product.code}
                                                 </td>
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.productType === 1 ? 'Producto' : 'Servicio'}</td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.name}</td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.price}</td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    <button className='rounded-full' type={'button'} onClick={() => moreUnity(key)}>+</button>
+                                                    <button disabled={product.productType === 1 ? false : true} className='rounded-full' type={'button'} onClick={() => moreUnity(key)}>+</button>
                                                         <label>&nbsp; { product.unit } &nbsp;</label>
                                                     <button className='rounded-full' type={'button'} onClick={() => lessUnity(key)} disabled={product.unit === 1}>-</button>
                                                 </td>
