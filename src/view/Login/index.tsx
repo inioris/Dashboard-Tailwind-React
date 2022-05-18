@@ -37,8 +37,6 @@ export default function Login( props : IPropsLogin){
         }
     }
 
-    console.log('aqui');
-
     return (
         <>
                 <div className="relative min-h-screen grid">

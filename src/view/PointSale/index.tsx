@@ -85,7 +85,6 @@ function PointSale() {
         if(id){
             products.find((item: any) => {
                 if(Number(item.id) === Number(id)) {
-                    console.log(item, 'aqui');
                     setListViewProducts([...listViewProducts, {
                         id: item.id,
                         name: item.name,

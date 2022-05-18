@@ -27,7 +27,6 @@ export default function Home() {
         
         checkIn.map((item: any) => {
             if(moment(item.createdAt).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")){
-                console.log(item, 'aq');
                 data = data + Number(item.totalToPay);
                 dataLength = dataLength + 1;
                 productQuantiy = productQuantiy + Number(item.quantity);
@@ -39,10 +38,10 @@ export default function Home() {
     }, [checkIn]);
 
     const projects = [
-        { name: 'Cuadre de Caja', initials: 'CC', href: '#', members: `${cuadre}`, bgColor: 'bg-pink-600' },
-        { name: 'Ventas en el Dia', initials: 'VD', href: '#', members: `${saleLength}`, bgColor: 'bg-purple-600' },
-        { name: 'Inventario', initials: 'I', href: '#', members: 16, bgColor: 'bg-yellow-500' },
-        { name: 'Productos y Servicios Vendidos', initials: 'PS', href: '#', members: `${productQuantity}`, bgColor: 'bg-green-500' },
+        { name: 'Cuadre de Caja', initials: 'CC', href: '#', subName: '$', members: `${cuadre}`, bgColor: 'bg-pink-600' },
+        { name: 'Ventas en el Dia', initials: 'VD', href: '#', subName: 'Cantidad', members: `${saleLength}`, bgColor: 'bg-purple-600' },
+        { name: 'Inventario', initials: 'I', href: '#', members: 16, subName: '', bgColor: 'bg-yellow-500' },
+        { name: 'Productos y Servicios Vendidos', initials: 'PS', subName: 'Cantidad', members: `${productQuantity}`, bgColor: 'bg-green-500' },
       ];
 
     return (
@@ -61,7 +60,7 @@ export default function Home() {
                                     <Link to={`/${project.href}`} className="text-gray-900 font-medium hover:text-gray-600">
                                         {project.name}
                                     </Link>
-                                    <p className="text-gray-500"> $ {project.members}</p>
+                                    <p className="text-gray-500"> {project.subName} {project.members}</p>
                                 </div>
                                 <div className="flex-shrink-0 pr-2">
                                     <button

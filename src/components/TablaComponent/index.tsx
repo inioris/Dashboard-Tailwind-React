@@ -6,18 +6,19 @@ import Input from "../../components/InputComponents";
       title?: string;
       message?: string;
       children: any;
+      setValueInput?: any;
       classAditional?: string;
       descripcion?: string;
       inputSearch?: boolean;
   }
   
   export default function TableComponent(props: IDataComponents) {
-      console.log(props.data);
 
       const onSearchProductsServices = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         e.preventDefault();
         const {value} = e.target;
-    }
+        props.setValueInput(value);
+      }
     return (
       <div className={`${props.classAditional}`}>
         

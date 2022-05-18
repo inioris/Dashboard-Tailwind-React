@@ -37,10 +37,7 @@ export default function FactoryView(){
             }
         })
         setProductsSale(data);
-        console.log(data);
     }
-
-    console.log(productsSale);
 
     return (
 

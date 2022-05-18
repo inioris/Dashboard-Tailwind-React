@@ -72,7 +72,6 @@ export default function Inventoy() {
         }
     }, [date])
 
-    console.log(listProductsAndServices);
 
     return (
         <>

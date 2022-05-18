@@ -16,7 +16,7 @@ setAuthorizationToken(global.window?.localStorage.AuthToken);
 redirectLoginAuth();
 
 const App: FC = () => {
-  // console.log(window?.location)
+
   return (
       <>
           <StoreProviderAuthLogin>

@@ -78,7 +78,7 @@ export default function TopNavigation() {
                         <a href={'/'} className="block relative">
                             <img
                                 alt="Stone Cold Steve Austin"
-                                src="/images/1.jpg"
+                                src="/images/1.png"
                                 className="h-10  object-cover rounded-full w-10"
                             />
                         </a>

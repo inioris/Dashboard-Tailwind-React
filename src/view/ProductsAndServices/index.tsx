@@ -19,9 +19,11 @@ export default function ProductsAndServices() {
     const { getAllProducts, saveProducts, updatedProducts } : any = useProducts();
     //const { getAllCategory } : any = useCategory();
     const [disable, setDisable] = useState(true);
-    console.log(authLogin, 'aqui');
+
     const [updated, setUpdated] = useState(false);
     const [deleted, setDeleted] = useState(false);
+    const [valueInputX, setValueInputX] = useState('');
+    const [productsSearch, setProductsSearch] = useState([]);
     const [idd, setId] = useState(0);
     const [ formProducts, setFormProducts ] = useState({
         name: '',
@@ -41,8 +43,6 @@ export default function ProductsAndServices() {
         getAllProducts();
         // getAllCategory();
     }, []);
-
-    console.log(authLogin);
 
     const changesHandleProducts = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         e.preventDefault();
@@ -138,9 +138,13 @@ export default function ProductsAndServices() {
     }
 
     useEffect(() => {
-        console.log(formProducts.productType, 'aqui');
         formProducts.productType == 2 ? setDisable(true) : setDisable(false);
     }, [formProducts.productType]);
+
+    useEffect(() => {
+        const dataList: any = products.filter((item: any) => item.name.toLocaleUpperCase().includes(valueInputX.toLocaleUpperCase()));
+        setProductsSearch(dataList);
+    }, [valueInputX])
 
 
     return (
@@ -161,6 +165,7 @@ export default function ProductsAndServices() {
                 <div>
                         <TableComponent
                             isMessage={true}
+                            setValueInput={setValueInputX}
                             title={'Productos y Servicios'}
                             inputSearch={true}
                             descripcion={'Crea, Modifica o Desabilita los productos o servicios a elegir'}
@@ -193,7 +198,7 @@ export default function ProductsAndServices() {
                                 </tr>
                             </thead>
                             <tbody className={"divide-y divide-gray-200 bg-white h-48"}>
-                                        {products.slice(0,6).map((product: any) => (
+                                        {(valueInputX ? productsSearch : products).slice(0,6).map((product: any) => (
                                             <tr>
                                                 <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900">
                                                     {product.code}

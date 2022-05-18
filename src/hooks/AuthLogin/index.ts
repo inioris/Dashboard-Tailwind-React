@@ -31,7 +31,6 @@ export function useAuthLogin() {
         getAuthLogin() {
             if (global.window?.localStorage.AuthToken){
                 const authLogin : any = localStorage.getItem('AuthToken');
-                console.log(authLogin, 'no');
                 dispatch({
                     type: TypesAuthLogin.GET_AUTHLOGIN,
                     payload: {
