@@ -6,8 +6,8 @@ import urlApi from '../../dataApi/urlApi';
 export function useProducts() {
     const dispatch : any = useDispatchProducts();
     return {
-        async getAllProducts(_id: number | string){
-            const products: any = await getId(`${urlApi}/products`);
+        async getAllProducts(query?: any){
+            const products: any = await getId(`${urlApi}/products?${query}`);
             dispatch({
                 type: TypesProducts.GET_PRODUCTS,
                 payload: {
@@ -29,9 +29,9 @@ export function useProducts() {
             });
         },
         async updatedProducts(id: number | string, data: any){
-            await updateAll(`${process.env.REACT_API_URL}/products`, id, data).then(async (res: any) => {
+            await updateAll(`${urlApi}/products`, id, data).then(async (res: any) => {
                 if (res.status === 200){
-                    const products: any = await getId(`${urlApi}/products`);
+                    const products: any = await getId(`${urlApi}/products?enabled=true`);
                     dispatch({
                         type: TypesProducts.GET_PRODUCTS,
                         payload: {

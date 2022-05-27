@@ -2,12 +2,12 @@ import React, { useEffect, useState, ChangeEvent } from "react";
 import {useStoreAuthLogin} from "../../hooks/AuthLogin/StoreProvider";
 import { useStoreProducts } from '../../hooks/Products/StoreProvider';
 import { useProducts } from "../../hooks/Products";
-import { isEmpty } from "lodash";
 import ModalComponents from "../../components/ModalComponent";
 import TableComponent from '../../components/TablaComponent';
 import Select from "../../components/SelectComponent";
-// import { useStoreCategory } from "../../hooks/Category/StoreProvider";
-// import { useCategory } from "../../hooks/Category";
+import DeleteModalComponents from '../../components/DeleteModalComponents';
+import TrashDeleteIcons from "../../icons/trashDeleteIcons";
+import EditIcons from "../../icons/EditIcons";
 
 
 
@@ -15,10 +15,9 @@ export default function ProductsAndServices() {
 
     const { authLogin } : any = useStoreAuthLogin();
     const { products }: any = useStoreProducts();
-    // const { category }: any = useStoreCategory();
     const { getAllProducts, saveProducts, updatedProducts } : any = useProducts();
-    //const { getAllCategory } : any = useCategory();
     const [disable, setDisable] = useState(true);
+
 
     const [updated, setUpdated] = useState(false);
     const [deleted, setDeleted] = useState(false);
@@ -31,16 +30,18 @@ export default function ProductsAndServices() {
         statusProduct: 1,
         quantity: 0,
         price: 0,
-        priceBucharse: 0,
+        priceBurchase: 0,
         productType: 1,
         user: 1,
-        enabled: true,  
+        enabled: true,
     });
 
     const [open, setOpen] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
 
     useEffect(() => {
-        getAllProducts();
+        const query: any = 'enabled=1'
+        getAllProducts(query);
         // getAllCategory();
     }, []);
 
@@ -55,6 +56,7 @@ export default function ProductsAndServices() {
             enabled: false,
         };
         await updatedProducts(id, data);
+        setOpenDelete(!openDelete);
     }
 
     const onSaveProducts = async () => {
@@ -65,7 +67,7 @@ export default function ProductsAndServices() {
                 statusProduct: formProducts.statusProduct,
                 quantity: Number(formProducts.quantity),
                 price: Number(formProducts.price),
-                priceBurchase: Number(formProducts.priceBucharse),
+                priceBurchase: Number(formProducts.priceBurchase),
                 productType: Number(formProducts.productType),
                 enabled: formProducts.enabled,
                 description: formProducts.description,
@@ -89,10 +91,10 @@ export default function ProductsAndServices() {
             quantity: 0,
             statusProduct: 1,
             price: 0,
-            priceBucharse: 0,
+            priceBurchase: 0,
             productType: 1,
             user: 1,
-            enabled: true, 
+            enabled: true,
         });
         setOpen(false);
     }
@@ -105,7 +107,7 @@ export default function ProductsAndServices() {
                 user: authLogin.idUser,
                 quantity: Number(formProducts.quantity),
                 price: Number(formProducts.price),
-                priceBurchase: Number(formProducts.priceBucharse),
+                priceBurchase: Number(formProducts.priceBurchase),
                 productType: Number(formProducts.productType),
                 enabled: formProducts.enabled,
                 description: formProducts.description,
@@ -129,10 +131,10 @@ export default function ProductsAndServices() {
             statusProduct: 1,
             quantity: 0,
             price: 0,
-            priceBucharse: 0,
+            priceBurchase: 0,
             productType: 1,
             user: 1,
-            enabled: true,  
+            enabled: true,
         });
         setOpen(false);
     }
@@ -206,8 +208,8 @@ export default function ProductsAndServices() {
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.name}</td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                     <span className={'inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium leading-5 bg-indigo-100 text-indigo-800'}>
-                                                        {product.enabled ? 'Activo' : 'Habilitado'} 
-                                                    </span> 
+                                                        {product.enabled ? 'Activo' : 'Habilitado'}
+                                                    </span>
                                                 </td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                      <span className={'flex justify-center'}>
@@ -228,7 +230,7 @@ export default function ProductsAndServices() {
                                                     {product.price}
                                                 </td>
                                                 <td className="relative whitespace-nowrap text-right text-sm font-medium sm:pr-6 lg:pr-8">
-                                                   
+
                                                         <div className={'grid grid-cols-2'}>
                                                             <div>
                                                                 <button
@@ -242,16 +244,16 @@ export default function ProductsAndServices() {
                                                                             description: product.description,
                                                                             quantity: product.quantity,
                                                                             statusProduct: 1,
-                                                                            price: product.prince,
-                                                                            priceBucharse: product.priceBucharse,
+                                                                            price: product.price,
+                                                                            priceBurchase: product.priceBurchase,
                                                                             productType: product.productType?.id,
                                                                             user: product.user.id,
-                                                                            enabled: product.enabled,  
+                                                                            enabled: product.enabled,
                                                                         });
                                                                     }}
-                                                                    className="bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
+                                                                    className="border border-transparent rounded-md shadow-sm py-2 px-3 text-base font-medium text-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
                                                                 >
-                                                                    M
+                                                                    <EditIcons class={'text-blue-500'} h={'h-6'} w={'w-6'} />
                                                                 </button>
                                                             </div>
                                                             <div>
@@ -259,16 +261,15 @@ export default function ProductsAndServices() {
                                                                     type="button"
                                                                     onClick={() => {
                                                                         setId(product.id);
-                                                                        setOpen(!open);
-                                                                        setDeleted(!deleted)
+                                                                        setOpenDelete(!openDelete);
                                                                     }}
-                                                                    className="bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
+                                                                    className="border border-transparent rounded-md shadow-sm py-2 px-3 text-base font-medium text-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
                                                                 >
-                                                                    E
+                                                                    <TrashDeleteIcons class={'text-red-500'} h={'h-6'} w={'w-6'} />
                                                                 </button>
                                                             </div>
-                                                        </div>                                              
-                                                   
+                                                        </div>
+
                                                 </td>
                                             </tr>
                                         ))}
@@ -277,7 +278,13 @@ export default function ProductsAndServices() {
                             }
                         />
                 </div>
-                <ModalComponents 
+                <DeleteModalComponents 
+                    open={openDelete}
+                    closeDeleteModal={() => setOpenDelete(!openDelete)}
+                    titleModal={'Desea Eliminar'}
+                    actions={() => onDeleteProducts(idd)}
+                />
+                <ModalComponents
                     openForm={open}
                     closeFormModal={() => setOpen(!open)}
                     title={'Agregar Productos o Servicios'}
@@ -287,7 +294,7 @@ export default function ProductsAndServices() {
                             <div className="mt-10 sm:mt-0">
                                 <div className="md:grid md:grid-cols-2 md:gap-6">
                                     <div className="mt-5 md:mt-0 md:col-span-2">
-                                    
+
                                     <div className="shadow overflow-hidden">
                                         <div className="px-4 py-5 bg-white sm:p-6">
                                         <div className="grid grid-cols-6 gap-6">
@@ -336,7 +343,7 @@ export default function ProductsAndServices() {
                                                         <input
                                                             type="number"
                                                             disabled={disable}
-                                                            value={formProducts.priceBucharse}
+                                                            value={Number(formProducts.priceBurchase)}
                                                             onChange={changesHandleProducts}
                                                             name="priceBucharse"
                                                             placeholder={'Precio Compra'}
@@ -349,10 +356,10 @@ export default function ProductsAndServices() {
                                                             Precio Venta
                                                         </label>
                                                         <input
-                                                            type="number"
-                                                            value={formProducts.price}
+                                                            type={"number"}
+                                                            value={Number(formProducts.price)}
                                                             onChange={changesHandleProducts}
-                                                            name="price"
+                                                            name={"price"}
                                                             placeholder={'Precio Venta'}
                                                             id="price"
                                                             className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
@@ -376,7 +383,7 @@ export default function ProductsAndServices() {
                                                 </div>
                                             </div>
                                             <div className={'col-span-6'}>
-                                                
+
                                                 <div className={'grid grid-cols-6 gap-4'}>
 
 
@@ -394,7 +401,7 @@ export default function ProductsAndServices() {
                                                                 className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
                                                             />
                                                     </div> */}
-                                                    
+
 
                                                     {/* {
                                                         !isEmpty(category) && disable ?
@@ -407,12 +414,12 @@ export default function ProductsAndServices() {
                                                                         isLabel={'top'}
                                                                         label={'Categoria'}
                                                                     />
-                                                                </div> 
+                                                                </div>
                                                             </> : null
                                                     } */}
-                                                    
+
                                                     {/* <div className={'col-span-2'}>
-                                                    
+
                                                     </div> */}
                                                 </div>
                                             </div>
@@ -420,7 +427,7 @@ export default function ProductsAndServices() {
                                                     <label htmlFor="description" className="block text-sm font-medium text-gray-700">
                                                         Decripcion
                                                     </label>
-                                                    <textarea 
+                                                    <textarea
                                                         name={'description'}
                                                         value={formProducts.description}
                                                         onChange={changesHandleProducts}
@@ -440,17 +447,9 @@ export default function ProductsAndServices() {
                                                 onClick={() => onUpdatedProducts(idd)}
                                                 className={"inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"}
                                             > Actualizar </button> : null
-                                          }  
+                                          }
                                           {
-                                              deleted ?
-                                                <button
-                                                type={"button"}
-                                                onClick={() => onDeleteProducts(idd)}
-                                                className={"inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"}
-                                            > Emilinar </button> : null
-                                          } 
-                                          {
-                                              updated && deleted ?
+                                              updated ?
                                                 null :
                                                 <button
                                                 type={"button"}
