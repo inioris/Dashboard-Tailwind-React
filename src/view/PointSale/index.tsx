@@ -293,7 +293,6 @@ function PointSale() {
                                     const {value} = e.target;
                                     setPaymentMoney(Number(value));
                                  }}
-                                 value={paymentMoney}
                                  wrapperClass={"mt-1 focus:ring-indigo-500 p-4 pl-3 2xl:text-xl focus:border-indigo-500 block w-full border shadow-sm text-xl border-gray-300 rounded-md"}
                                  placeholder={"Pago Con"}
                             />

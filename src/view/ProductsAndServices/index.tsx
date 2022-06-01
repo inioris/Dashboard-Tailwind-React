@@ -20,7 +20,6 @@ export default function ProductsAndServices() {
 
 
     const [updated, setUpdated] = useState(false);
-    const [deleted, setDeleted] = useState(false);
     const [valueInputX, setValueInputX] = useState('');
     const [productsSearch, setProductsSearch] = useState([]);
     const [idd, setId] = useState(0);
@@ -278,7 +277,7 @@ export default function ProductsAndServices() {
                             }
                         />
                 </div>
-                <DeleteModalComponents 
+                <DeleteModalComponents
                     open={openDelete}
                     closeDeleteModal={() => setOpenDelete(!openDelete)}
                     titleModal={'Desea Eliminar'}

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useCheckIn } from './../../hooks/CheckIn';
-import { useStoreCheckIn } from './../../hooks/CheckIn/StoreProvider';
-import { useSale } from './../../hooks/Sale';
+import { useCheckIn } from '../../hooks/CheckIn';
+// import { useStoreCheckIn } from '../../hooks/CheckIn/StoreProvider';
+import { useSale } from '../../hooks/Sale';
 import moment from 'moment';
-import { useStoreSale } from './../../hooks/Sale/StoreProvider';
+import { useStoreSale } from '../../hooks/Sale/StoreProvider';
 import TableComponent from '../../components/TablaComponent';
 import { isEmpty } from 'lodash';
+import BasicDocument from "../../componentsPdf";
 
 
 export default function Inventoy() {
@@ -13,9 +14,10 @@ export default function Inventoy() {
     const { getAllCheckIn } : any = useCheckIn();
     const {getAllSale}: any = useSale();
 
-    const { checkIn } : any = useStoreCheckIn();
+    //const { checkIn } : any = useStoreCheckIn();
     const { sale } : any = useStoreSale();
     const [date, setDate] = useState(`${moment().format("YYYY-MM-DD")}`);
+    const [dateEnd, setDateEnd] = useState(`${moment().format("YYYY-MM-DD")}`);
     const [listProducts, setListProducts] = useState(0);
     const [moneyBuyAll, setMoneyBuyAll] = useState(0);
     const [listCapitalBurchase, setCapitalBurchase] = useState(0);
@@ -46,13 +48,13 @@ export default function Inventoy() {
         if(!isEmpty(sale)){
             const data: any = [];
 
-            let moneyProduct: number = 0; 
-            let moneyService: number = 0; 
+            let moneyProduct: number = 0;
+            let moneyService: number = 0;
             let moneyPucharse: number = 0;
             let moneyAll: number = 0
 
             sale.map((item: any) => {
-                if(moment(item.createdAt).format("YYYY-MM-DD") ===  moment(date).format("YYYY-MM-DD")){
+                if(moment(date).format("YYYY-MM-DD") <= moment(item.createdAt).format("YYYY-MM-DD") &&  moment(dateEnd).format("YYYY-MM-DD") >= moment(item.createdAt).format("YYYY-MM-DD")){
                     if(item.product.productType.id === 1){
                         moneyAll = moneyAll + Number(item.product.price);
                         moneyProduct = moneyProduct + (Number(item.product.price) - Number(item.product.priceBurchase)) * Number(item.quantity);
@@ -60,7 +62,7 @@ export default function Inventoy() {
                     } else {
                         moneyService = moneyService + Number(item.product.price);
                     }
-                    
+
                     data.push(item);
                 }
             })
@@ -82,9 +84,9 @@ export default function Inventoy() {
                         <div className="sm:flex-auto">
                             <h1 className="text-xl text-gray-900"> Inventario </h1>
                             <p className="mt-2 text-sm text-gray-700">Visualiza la cantidad de ventas que tuviste</p>
-                        </div>                 
+                        </div>
                     </div>
-                </div>           
+                </div>
 
                 <hr />
 
@@ -175,25 +177,48 @@ export default function Inventoy() {
                         Selecciona la Fecha
                         </h3>
 
-                        <div className="mt-6">
-                        <label htmlFor="dateConsultin" className="block text-sm font-medium text-gray-700">
-                            Fecha
-                        </label>
-                        <div className="mt-1">
-                            <input
-                            type="date"
-                            max={`${moment().format("YYYY-MM-DD")}`}
-                            id="dateConsultin"
-                            value={date}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                e.preventDefault();
-                                const {value} = e.target;
-                                setDate(value);
-                            }}
-                            name="dateConsultin"
-                            className="block w-full border border-gray-300 py-3 px-2 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            />
-                        </div>
+                        <div className="mt-6 grid grid-cols-2 gap-x-4">
+                            <div>
+                                <label htmlFor="dateConsultin" className="block text-sm font-medium text-gray-700">
+                                    Fecha Inicio
+                                </label>
+                                <div className="mt-1">
+                                    <input
+                                        type="date"
+                                        max={`${moment().format("YYYY-MM-DD")}`}
+                                        id="dateConsultin"
+                                        value={date}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            e.preventDefault();
+                                            const {value} = e.target;
+                                            setDate(value);
+                                        }}
+                                        name="dateConsultin"
+                                        className="block w-full border border-gray-300 py-3 px-2 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label htmlFor="dateConsultin" className="block text-sm font-medium text-gray-700">
+                                    Fecha Fin
+                                </label>
+                                <div className="mt-1">
+                                    <input
+                                        type="date"
+                                        max={`${moment().format("YYYY-MM-DD")}`}
+                                        id="dateConsultinEnd"
+                                        value={dateEnd}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            e.preventDefault();
+                                            const {value} = e.target;
+                                            setDateEnd(value);
+                                        }}
+                                        name="dateConsultin"
+                                        className="block w-full border border-gray-300 py-3 px-2 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    />
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
@@ -249,7 +274,7 @@ export default function Inventoy() {
                                     </tr>
                                 )) : null}
                             </tbody>
-                            
+
                             </>}
                         />
                     </div>
@@ -257,6 +282,9 @@ export default function Inventoy() {
                     <div className="mt-10 flex justify-end pt-6 border-t border-gray-200">
                         <button
                         type="submit"
+                        onClick={() => BasicDocument({
+                            name: 'CHUKY BARBER FLOW'
+                        })}
                         className="bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
                         >
                         Imprimir

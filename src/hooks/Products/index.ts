@@ -31,7 +31,7 @@ export function useProducts() {
         async updatedProducts(id: number | string, data: any){
             await updateAll(`${urlApi}/products`, id, data).then(async (res: any) => {
                 if (res.status === 200){
-                    const products: any = await getId(`${urlApi}/products?enabled=true`);
+                    const products: any = await getId(`${urlApi}/products?enabled=1`);
                     dispatch({
                         type: TypesProducts.GET_PRODUCTS,
                         payload: {
