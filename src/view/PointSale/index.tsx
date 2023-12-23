@@ -177,7 +177,7 @@ function PointSale() {
         })
 
         const purchase = {
-            "user": get(authLogin, 'idUser', 1),
+            "user": get(authLogin, 'idUser ', 1),
             "purchaseDescription": "Todo Bueno",
             "quantity": listProductsSale.length,
             "payWith": Number(paymentMoney),
