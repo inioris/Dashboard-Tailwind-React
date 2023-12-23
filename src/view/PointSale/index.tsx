@@ -53,6 +53,48 @@ function PointSale() {
         listViewProducts.map((item: InewSaleListPrime) => {
             setPayment(payment + item.unitPriceTotal);
         });
+        if(!listViewProducts.length) {
+            setListViewProducts([
+                {
+                    productType: 1,
+                    name: "Producto 1",
+                    price: 200,
+                    quantity: 30,
+                    code: 'CACA',
+                    unit: 1,
+                    unitPriceTotal: 20,
+
+
+                },
+                {
+                    productType: 1,
+                    name: "Producto 2",
+                    price: 200,
+                    quantity: 30,
+                    code: 'MAMA',
+                    unit: 1,
+                    unitPriceTotal: 20,
+                },
+                {
+                    productType: 1,
+                    name: "Producto 3",
+                    price: 100,
+                    quantity: 30,
+                    code: 'XAXA',
+                    unit: 1,
+                    unitPriceTotal: 20,
+                },
+                {
+                    productType: 1,
+                    name: "Producto 4",
+                    price: 250,
+                    quantity: 30,
+                    code: 'BABA',
+                    unit: 1,
+                    unitPriceTotal: 20,
+                },
+            ])
+        }
     }, [listViewProducts]);
 
     /*const onAddProductsList = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

@@ -29,7 +29,9 @@ export default function ProductsAndServices() {
         statusProduct: 1,
         quantity: 0,
         price: 0,
+        expirationAlert: 0,
         priceBurchase: 0,
+        expirationDate: '',
         productType: 1,
         user: 1,
         enabled: true,
@@ -66,6 +68,8 @@ export default function ProductsAndServices() {
                 statusProduct: formProducts.statusProduct,
                 quantity: Number(formProducts.quantity),
                 price: Number(formProducts.price),
+                expirationDate: formProducts.expirationDate,
+                expirationAlert: formProducts.expirationAlert,
                 priceBurchase: Number(formProducts.priceBurchase),
                 productType: Number(formProducts.productType),
                 enabled: formProducts.enabled,
@@ -76,6 +80,7 @@ export default function ProductsAndServices() {
             const createService : any = {
                 name: formProducts.name,
                 user: authLogin.idUser,
+                expirationDate: '',
                 statusProduct: formProducts.statusProduct,
                 price: Number(formProducts.price),
                 productType: Number(formProducts.productType),
@@ -90,6 +95,8 @@ export default function ProductsAndServices() {
             quantity: 0,
             statusProduct: 1,
             price: 0,
+            expirationAlert: 0,
+            expirationDate: '',
             priceBurchase: 0,
             productType: 1,
             user: 1,
@@ -109,6 +116,7 @@ export default function ProductsAndServices() {
                 priceBurchase: Number(formProducts.priceBurchase),
                 productType: Number(formProducts.productType),
                 enabled: formProducts.enabled,
+                expirationDate: formProducts.expirationDate,
                 description: formProducts.description,
             };
             await updatedProducts(id, createUpdated);
@@ -119,6 +127,7 @@ export default function ProductsAndServices() {
                 price: Number(formProducts.price),
                 productType: Number(formProducts.productType),
                 enabled: formProducts.enabled,
+                expirationDate: formProducts.expirationDate,
                 description: formProducts.description,
             };
             await updatedProducts(id, createUpdated);
@@ -130,7 +139,9 @@ export default function ProductsAndServices() {
             statusProduct: 1,
             quantity: 0,
             price: 0,
+            expirationAlert: 0,
             priceBurchase: 0,
+            expirationDate: '',
             productType: 1,
             user: 1,
             enabled: true,
@@ -242,7 +253,9 @@ export default function ProductsAndServices() {
                                                                             name: product.name,
                                                                             description: product.description,
                                                                             quantity: product.quantity,
+                                                                            expirationDate: '',
                                                                             statusProduct: 1,
+                                                                            expirationAlert: product.expirationAlert,
                                                                             price: product.price,
                                                                             priceBurchase: product.priceBurchase,
                                                                             productType: product.productType?.id,
@@ -342,7 +355,7 @@ export default function ProductsAndServices() {
                                                         <input
                                                             type="number"
                                                             disabled={disable}
-                                                            value={Number(formProducts.priceBurchase)}
+                                                            defaultValue={Number(formProducts.priceBurchase)}
                                                             onChange={changesHandleProducts}
                                                             name="priceBucharse"
                                                             placeholder={'Precio Compra'}
@@ -356,7 +369,7 @@ export default function ProductsAndServices() {
                                                         </label>
                                                         <input
                                                             type={"number"}
-                                                            value={Number(formProducts.price)}
+                                                            defaultValue={Number(formProducts.price)}
                                                             onChange={changesHandleProducts}
                                                             name={"price"}
                                                             placeholder={'Precio Venta'}
@@ -370,7 +383,7 @@ export default function ProductsAndServices() {
                                                         </label>
                                                         <input
                                                             type="number"
-                                                            value={formProducts.quantity}
+                                                            defaultValue={formProducts.quantity}
                                                             disabled={disable}
                                                             onChange={changesHandleProducts}
                                                             name="quantity"
@@ -386,7 +399,7 @@ export default function ProductsAndServices() {
                                                 <div className={'grid grid-cols-6 gap-4'}>
 
 
-                                                {/* <div className={'col-span-2'}>
+                                                <div className={'col-span-2'}>
                                                         <label htmlFor="expirationDate" className="block text-sm font-medium text-gray-700">
                                                                 Fecha de Caducidad
                                                             </label>
@@ -399,23 +412,22 @@ export default function ProductsAndServices() {
                                                                 id="expirationDate"
                                                                 className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
                                                             />
-                                                    </div> */}
+                                                    </div>
 
 
-                                                    {/* {
-                                                        !isEmpty(category) && disable ?
-                                                            <>
-                                                                <div className={'col-span-2'}>
-                                                                    <Select
-                                                                        data={category}
-                                                                        onChange={changesHandleProducts}
-                                                                        name={'category'}
-                                                                        isLabel={'top'}
-                                                                        label={'Categoria'}
-                                                                    />
+                                                    <div className={'col-span-2'}>
+                                                                    <label htmlFor="expirationDate" className="block text-sm font-medium text-gray-700">
+                                                                    Alertar cuando queden
+                                                                </label>
+                                                                <input
+                                                                    type="number"
+                                                                    value={formProducts.expirationAlert}
+                                                                    disabled={disable}
+                                                                    onChange={changesHandleProducts}
+                                                                    name="expirationAlert"
+                                                                    className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
+                                                                />
                                                                 </div>
-                                                            </> : null
-                                                    } */}
 
                                                     {/* <div className={'col-span-2'}>
 
