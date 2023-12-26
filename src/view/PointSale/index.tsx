@@ -1,7 +1,7 @@
 import { useState, useEffect, ChangeEvent} from "react";
 import { useStoreProducts } from '../../hooks/Products/StoreProvider';
 import { useProducts } from "../../hooks/Products";
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import moment from "moment";
 import Input from "../../components/InputComponents";
 import {useStoreAuthLogin} from "../../hooks/AuthLogin/StoreProvider";
@@ -38,8 +38,8 @@ function PointSale() {
     const [checkDescApli, setCheckDescApli] = useState(false);
     const [checkRNC, setCheckRNC] = useState(false);
     const [listViewProducts, setListViewProducts] : any[] = useState([]);
-    // const [inputSearch, setInputSearch] = useState('');
-    // const [inputServiceAndProducts, setInputServiceAndProducts] = useState('');
+    const [inputSearch, setInputSearch] = useState('');
+    const [inputServiceAndProducts, setInputServiceAndProducts] = useState('');
     const [receipt, setReceipt] = useState(false);
     const [discounts, setDiscounts] = useState(0);
     const [rnc, setRNC] = useState('');
@@ -53,51 +53,9 @@ function PointSale() {
         listViewProducts.map((item: InewSaleListPrime) => {
             setPayment(payment + item.unitPriceTotal);
         });
-        if(!listViewProducts.length) {
-            setListViewProducts([
-                {
-                    productType: 1,
-                    name: "Producto 1",
-                    price: 200,
-                    quantity: 30,
-                    code: 'CACA',
-                    unit: 1,
-                    unitPriceTotal: 20,
-
-
-                },
-                {
-                    productType: 1,
-                    name: "Producto 2",
-                    price: 200,
-                    quantity: 30,
-                    code: 'MAMA',
-                    unit: 1,
-                    unitPriceTotal: 20,
-                },
-                {
-                    productType: 1,
-                    name: "Producto 3",
-                    price: 100,
-                    quantity: 30,
-                    code: 'XAXA',
-                    unit: 1,
-                    unitPriceTotal: 20,
-                },
-                {
-                    productType: 1,
-                    name: "Producto 4",
-                    price: 250,
-                    quantity: 30,
-                    code: 'BABA',
-                    unit: 1,
-                    unitPriceTotal: 20,
-                },
-            ])
-        }
     }, [listViewProducts]);
 
-    /*const onAddProductsList = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const onAddProductsList = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         e.preventDefault();
         const {value} = e.target;
         setInputSearch(value);
@@ -117,7 +75,7 @@ function PointSale() {
                 }
             });
         }
-    }*/
+    }
 
     const filteredProducts = query === '' ? products : products.filter((product: any) => {
         return product.name.toLowerCase().includes(query.toLowerCase())
@@ -217,17 +175,18 @@ function PointSale() {
                             <span className={'text-2xl pl-2'} style={{ borderLeft: '5px solid #0415FA' }}> Lista de Compras </span>
                         </div>
                         <div className={'grid grid-cols-2 gap-4 py-4'}>
-                            {/* <div className={'pl-2 col-span-1'}>
+                            <div className={'pl-2 col-span-1'}>
                                 <Input
                                     type="text"
                                     max={4}
                                     placeholder={'Agregar Productos'}
                                     value={inputSearch}
+                                    disable={isEmpty(products)}
                                     name={"searchProductsList"}
                                     onChange={onAddProductsList}
                                     wrapperClass={"mt-1 focus:ring-indigo-500 p-2 pl-3 2xl:text-xl focus:border-indigo-500 block w-full border shadow-sm sm:text-sm border-gray-300 rounded-md"}
                                 />
-                            </div> */}
+                            </div>
                             <div className={'col-span-1'}>
                                 <div className={'pb-2 pt-2 w-full'}>
                                         <Combobox value={selectedProduct} onChange={setSelectedProduct}>
