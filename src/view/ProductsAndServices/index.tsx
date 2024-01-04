@@ -31,6 +31,7 @@ export default function ProductsAndServices() {
         price: 0,
         expirationAlert: 0,
         priceBurchase: 0,
+        porcentagePrice: 0,
         expirationDate: '',
         productType: 1,
         user: 1,
@@ -49,9 +50,15 @@ export default function ProductsAndServices() {
     const changesHandleProducts = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         e.preventDefault();
         const {name, value} = e.target;
+        if(name === 'porcentagePrice' && Number(formProducts.priceBurchase) > 0) {
+            const otherName = 'price';
+            const otherPrice = Number(value) * Number(formProducts.priceBurchase) / 100;
+            const price = Number(formProducts.priceBurchase) + otherPrice;
+            setFormProducts(formProducts => ({...formProducts, [otherName]: price }));
+        }
         setFormProducts(formProducts => ({...formProducts, [name]: value }));
     }
-
+    console.log(formProducts);
     const onDeleteProducts = async (id: any) => {
         const data = {
             enabled: false,
@@ -61,7 +68,7 @@ export default function ProductsAndServices() {
     }
 
     const onSaveProducts = async () => {
-        if(formProducts.productType == 1){
+        if(formProducts.productType === 1){
             const createProduct : any = {
                 name: formProducts.name,
                 user: authLogin.idUser,
@@ -71,6 +78,7 @@ export default function ProductsAndServices() {
                 expirationDate: formProducts.expirationDate,
                 expirationAlert: formProducts.expirationAlert,
                 priceBurchase: Number(formProducts.priceBurchase),
+                porcentagePrice: formProducts.porcentagePrice,
                 productType: Number(formProducts.productType),
                 enabled: formProducts.enabled,
                 description: formProducts.description,
@@ -95,6 +103,7 @@ export default function ProductsAndServices() {
             quantity: 0,
             statusProduct: 1,
             price: 0,
+            porcentagePrice: 0,
             expirationAlert: 0,
             expirationDate: '',
             priceBurchase: 0,
@@ -107,7 +116,7 @@ export default function ProductsAndServices() {
 
     const onUpdatedProducts = async (id: any) => {
 
-        if(formProducts.productType == 1){
+        if(formProducts.productType === 1){
             const createUpdated : any = {
                 name: formProducts.name,
                 user: authLogin.idUser,
@@ -139,6 +148,7 @@ export default function ProductsAndServices() {
             statusProduct: 1,
             quantity: 0,
             price: 0,
+            porcentagePrice: 0,
             expirationAlert: 0,
             priceBurchase: 0,
             expirationDate: '',
@@ -150,7 +160,7 @@ export default function ProductsAndServices() {
     }
 
     useEffect(() => {
-        formProducts.productType == 2 ? setDisable(true) : setDisable(false);
+        formProducts.productType === 2 ? setDisable(true) : setDisable(false);
     }, [formProducts.productType]);
 
     useEffect(() => {
@@ -255,6 +265,7 @@ export default function ProductsAndServices() {
                                                                             quantity: product.quantity,
                                                                             expirationDate: '',
                                                                             statusProduct: 1,
+                                                                            porcentagePrice: product.porcentagePrice,
                                                                             expirationAlert: product.expirationAlert,
                                                                             price: product.price,
                                                                             priceBurchase: product.priceBurchase,
@@ -355,9 +366,9 @@ export default function ProductsAndServices() {
                                                         <input
                                                             type="number"
                                                             disabled={disable}
-                                                            defaultValue={Number(formProducts.priceBurchase)}
+                                                            defaultValue={formProducts.priceBurchase}
                                                             onChange={changesHandleProducts}
-                                                            name="priceBucharse"
+                                                            name="priceBurchase"
                                                             placeholder={'Precio Compra'}
                                                             id="price-bucharse"
                                                             className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
@@ -372,23 +383,26 @@ export default function ProductsAndServices() {
                                                             defaultValue={Number(formProducts.price)}
                                                             onChange={changesHandleProducts}
                                                             name={"price"}
+                                                            disabled={true}
+                                                            style={{ display: 'none' }}
                                                             placeholder={'Precio Venta'}
-                                                            id="price"
                                                             className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
                                                         />
+                                                        <span className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md">
+                                                            {formProducts.price}
+                                                        </span>
                                                 </div>
                                                 <div className={'col-span-2'}>
                                                         <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
-                                                            Cantidad
+                                                            Porcentage de venta
                                                         </label>
                                                         <input
                                                             type="number"
-                                                            defaultValue={formProducts.quantity}
-                                                            disabled={disable}
+                                                            value={formProducts.porcentagePrice}
+                                                            max={100}
                                                             onChange={changesHandleProducts}
-                                                            name="quantity"
-                                                            placeholder={'Cantidad'}
-                                                            id="quantity"
+                                                            name="porcentagePrice"
+                                                            placeholder={'Insertar porcentage de venta'}
                                                             className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
                                                         />
                                                 </div>
@@ -429,9 +443,21 @@ export default function ProductsAndServices() {
                                                                 />
                                                                 </div>
 
-                                                    {/* <div className={'col-span-2'}>
-
-                                                    </div> */}
+                                                    <div className={'col-span-2'}>
+                                                        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
+                                                            Cantidad
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            defaultValue={formProducts.quantity}
+                                                            disabled={disable}
+                                                            onChange={changesHandleProducts}
+                                                            name="quantity"
+                                                            placeholder={'Cantidad'}
+                                                            id="quantity"
+                                                            className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div className={'col-span-6'}>
