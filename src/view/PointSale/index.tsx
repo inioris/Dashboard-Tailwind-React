@@ -175,7 +175,7 @@ function PointSale() {
                             <span className={'text-2xl pl-2'} style={{ borderLeft: '5px solid #0415FA' }}> Lista de Compras </span>
                         </div>
                         <div className={'grid grid-cols-2 gap-4 py-4'}>
-                            <div className={'pl-2 col-span-1'}>
+                            {/* <div className={'pl-2 col-span-1'}>
                                 <Input
                                     type="text"
                                     max={4}
@@ -186,7 +186,7 @@ function PointSale() {
                                     onChange={onAddProductsList}
                                     wrapperClass={"mt-1 focus:ring-indigo-500 p-2 pl-3 2xl:text-xl focus:border-indigo-500 block w-full border shadow-sm sm:text-sm border-gray-300 rounded-md"}
                                 />
-                            </div>
+                            </div> */}
                             <div className={'col-span-1'}>
                                 <div className={'pb-2 pt-2 w-full'}>
                                         <Combobox value={selectedProduct} onChange={setSelectedProduct}>
