@@ -8,6 +8,7 @@ import Select from "../../components/SelectComponent";
 import DeleteModalComponents from '../../components/DeleteModalComponents';
 import TrashDeleteIcons from "../../icons/trashDeleteIcons";
 import EditIcons from "../../icons/EditIcons";
+import { InformationCircleIcon } from '@heroicons/react/20/solid'
 
 
 
@@ -460,6 +461,24 @@ export default function ProductsAndServices() {
                                                     </div>
                                                 </div>
                                             </div>
+                                            {
+                                                formProducts.price && formProducts.quantity ? 
+                                            <div className="col-span-6">
+                                                <div className="rounded-md bg-blue-50 p-4">
+                                                    <div className="flex">
+                                                        <div className="flex-shrink-0">
+                                                        <InformationCircleIcon className="h-5 w-5 text-blue-400" aria-hidden="true" />
+                                                        </div>
+                                                        <div className="ml-3 flex-1 md:flex md:justify-between">
+                                                        <p className="text-sm text-blue-700">Cantidad a recibir cuando venda todos las unidades</p>
+                                                            <p className="mt-3 text-sm md:ml-6 md:mt-0">
+                                                                { formProducts.price * formProducts.quantity }
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>: null
+                                            }
                                             <div className={'col-span-6'}>
                                                     <label htmlFor="description" className="block text-sm font-medium text-gray-700">
                                                         Decripcion
