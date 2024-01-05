@@ -60,7 +60,7 @@ export default function ReceiptPayment(props: IPropsComponents) {
                     <div className="flex items-center justify-between">
                         <dt className="text-sm">Subtotal</dt>
                         <dd className="text-sm font-medium text-gray-900">
-                            ${props.subTotal}
+                            ${Number(props.subTotal).toFixed(2)}
                         </dd>
                     </div>
                     <div className="flex items-center justify-between">
@@ -78,7 +78,7 @@ export default function ReceiptPayment(props: IPropsComponents) {
                     <div className="flex items-center justify-between border-t border-gray-200 pt-6">
                         <dt className="text-base font-medium">Total</dt>
                         <dd className="text-base font-medium text-gray-900">
-                            ${ Number(props.subTotal)  + Number(props.taxes) + Number(props.discounts) }
+                            ${ (Number(props.subTotal)  + Number(props.taxes) + Number(props.discounts)).toFixed(2) }
                         </dd>
                     </div>
                 </dl>

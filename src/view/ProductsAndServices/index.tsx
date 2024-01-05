@@ -18,6 +18,8 @@ export default function ProductsAndServices() {
     const { products }: any = useStoreProducts();
     const { getAllProducts, saveProducts, updatedProducts } : any = useProducts();
     const [disable, setDisable] = useState(true);
+    const [pocentage, setPocentage] = useState(true);
+    const [inpuesto, setInpuesto] = useState(true);
 
 
     const [updated, setUpdated] = useState(false);
@@ -30,6 +32,7 @@ export default function ProductsAndServices() {
         statusProduct: 1,
         quantity: 0,
         price: 0,
+        tax: 0,
         expirationAlert: 0,
         priceBurchase: 0,
         porcentagePrice: 0,
@@ -51,14 +54,36 @@ export default function ProductsAndServices() {
     const changesHandleProducts = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         e.preventDefault();
         const {name, value} = e.target;
-        if(name === 'porcentagePrice' && Number(formProducts.priceBurchase) > 0) {
-            const otherName = 'price';
-            const otherPrice = Number(value) * Number(formProducts.priceBurchase) / 100;
-            const price = Number(formProducts.priceBurchase) + otherPrice;
-            setFormProducts(formProducts => ({...formProducts, [otherName]: price }));
-        }
         setFormProducts(formProducts => ({...formProducts, [name]: value }));
     }
+
+    useEffect(() => {
+        if(Number(formProducts.priceBurchase) > 0) {
+            const otherName = 'price';
+            const otherPrice = (Number(formProducts.priceBurchase) * Number(formProducts.tax)) / 100;
+            let price: any = Number(formProducts.priceBurchase) + otherPrice;
+            if(formProducts.porcentagePrice > 0) {
+                const porcentagePrice = (Number(price) * Number(formProducts.porcentagePrice)) / 100;
+                price = price + porcentagePrice;
+            }
+            setFormProducts(formProducts => ({...formProducts, [otherName]: price.toFixed(2) }));
+        }
+    }, [formProducts.tax]);
+
+    useEffect(() => {
+        if(Number(formProducts.priceBurchase) > 0) {
+            const otherName = 'price';
+            const otherPrice = (Number(formProducts.priceBurchase) * Number(formProducts.porcentagePrice)) / 100;
+            let price: any = Number(formProducts.priceBurchase) + otherPrice;
+            if(formProducts.tax > 0) {
+                const tax = (Number(price) * Number(formProducts.tax)) / 100;
+                price = price + tax;
+            }
+            setFormProducts(formProducts => ({...formProducts, [otherName]: price.toFixed(2) }));
+        }
+    }, [formProducts.porcentagePrice]);
+
+
     console.log(formProducts);
     const onDeleteProducts = async (id: any) => {
         const data = {
@@ -74,7 +99,8 @@ export default function ProductsAndServices() {
                 name: formProducts.name,
                 user: authLogin.idUser,
                 statusProduct: formProducts.statusProduct,
-                quantity: Number(formProducts.quantity),
+                quantity: formProducts.quantity,
+                tax: formProducts.tax,
                 price: Number(formProducts.price),
                 expirationDate: formProducts.expirationDate,
                 expirationAlert: formProducts.expirationAlert,
@@ -102,6 +128,7 @@ export default function ProductsAndServices() {
             name: '',
             description: '',
             quantity: 0,
+            tax: 0,
             statusProduct: 1,
             price: 0,
             porcentagePrice: 0,
@@ -121,6 +148,7 @@ export default function ProductsAndServices() {
             const createUpdated : any = {
                 name: formProducts.name,
                 user: authLogin.idUser,
+                tax: Number(formProducts.tax),
                 quantity: Number(formProducts.quantity),
                 price: Number(formProducts.price),
                 priceBurchase: Number(formProducts.priceBurchase),
@@ -147,6 +175,7 @@ export default function ProductsAndServices() {
             name: '',
             description: '',
             statusProduct: 1,
+            tax: 0,
             quantity: 0,
             price: 0,
             porcentagePrice: 0,
@@ -266,6 +295,7 @@ export default function ProductsAndServices() {
                                                                             quantity: product.quantity,
                                                                             expirationDate: '',
                                                                             statusProduct: 1,
+                                                                            tax: product.porcentagePrice,
                                                                             porcentagePrice: product.porcentagePrice,
                                                                             expirationAlert: product.expirationAlert,
                                                                             price: product.price,
@@ -322,6 +352,21 @@ export default function ProductsAndServices() {
                                     <div className="shadow overflow-hidden">
                                         <div className="px-4 py-5 bg-white sm:p-6">
                                         <div className="grid grid-cols-6 gap-6">
+                                            {/* <div className="col-span-6 sm:col-span-4">
+                                                <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
+                                                    Codigo de Producto o Servicio
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="code"
+                                                    onChange={changesHandleProducts}
+                                                    placeholder={'Codigo Producto o Servicio'}
+                                                    value={formProducts.name}
+                                                    id="first-name"
+                                                    autoComplete="given-name"
+                                                    className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
+                                                />
+                                            </div> */}
                                             <div className="col-span-6 sm:col-span-4">
                                                 <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
                                                     Nombre de Producto o Servicio
@@ -343,12 +388,20 @@ export default function ProductsAndServices() {
                                                     data={[
                                                         {
                                                             id: 1,
-                                                            name: 'Productos'
+                                                            name: 'Medicamentos'
                                                         },
                                                         {
                                                             id: 2,
-                                                            name: 'Servicios'
-                                                        }
+                                                            name: 'Cosmeticos'
+                                                        },
+                                                        {
+                                                            id: 3,
+                                                            name: 'Cereales'
+                                                        },
+                                                        {
+                                                            id: 4,
+                                                            name: 'Lacteos'
+                                                        },
                                                     ]}
                                                     name={'productType'}
                                                     value={formProducts.productType}
@@ -376,39 +429,91 @@ export default function ProductsAndServices() {
                                                         />
                                                 </div>
                                                 <div className={'col-span-2'}>
+                                                        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
+                                                            Porcentage de venta %
+                                                        </label>
+                                                        <div className="grid grid-cols-4 gap-4">
+                                                            <div className={'col-span-1'}>
+                                                                <input
+                                                                    type={"checkbox"}
+                                                                    defaultChecked={pocentage}
+                                                                    onClick={() => setPocentage(!pocentage)}
+                                                                    name="porcentageKey"
+                                                                    placeholder={'Insertar porcentage de venta'}
+                                                                />
+                                                            </div>
+                                                            {
+                                                                pocentage ?
+                                                                    <>
+                                                                        <div className={'col-span-3'}>
+                                                                            <input
+                                                                                type="number"
+                                                                                value={formProducts.porcentagePrice}
+                                                                                max={100}
+                                                                                onChange={changesHandleProducts}
+                                                                                name="porcentagePrice"
+                                                                                placeholder={'Insertar porcentage de venta'}
+                                                                                className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
+                                                                            />
+                                                                        </div>
+                                                                    </> : null
+                                                            }
+                                                        </div>
+                                                </div>
+                                                <div className={'col-span-2'}>
                                                         <label htmlFor="price" className="block text-sm font-medium text-gray-700">
                                                             Precio Venta
                                                         </label>
-                                                        <input
-                                                            type={"number"}
-                                                            defaultValue={Number(formProducts.price)}
-                                                            onChange={changesHandleProducts}
-                                                            name={"price"}
-                                                            disabled={true}
-                                                            style={{ display: 'none' }}
-                                                            placeholder={'Precio Venta'}
-                                                            className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
-                                                        />
-                                                        <span className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md">
-                                                            {formProducts.price}
-                                                        </span>
+                                                        {
+                                                            pocentage ?
+                                                                <>
+                                                                    <span className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md">
+                                                                    {formProducts.price}
+                                                                </span> 
+                                                                </> : <>
+                                                                <input
+                                                                        type={"number"}
+                                                                        value={Number(formProducts.price)}
+                                                                        onChange={changesHandleProducts}
+                                                                        name={"price"}
+                                                                        placeholder={'Precio Venta'}
+                                                                        className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
+                                                                    />
+                                                                </> 
+                                                        }
                                                 </div>
-                                                <div className={'col-span-2'}>
-                                                        <label htmlFor="quantity" className="block text-sm font-medium text-gray-700">
-                                                            Porcentage de venta
-                                                        </label>
-                                                        <input
-                                                            type="number"
-                                                            value={formProducts.porcentagePrice}
-                                                            max={100}
-                                                            onChange={changesHandleProducts}
-                                                            name="porcentagePrice"
-                                                            placeholder={'Insertar porcentage de venta'}
-                                                            className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
-                                                        />
-                                                </div>
+                                                
                                                 </div>
                                             </div>
+                                            <div className={'col-span-2'}>
+                                                <div className="grid grid-cols-6">
+                                                    <div className={'col-span-3'}>
+                                                            <label htmlFor="inpuestoeKey">
+                                                                <input
+                                                                        type={"checkbox"}
+                                                                        defaultChecked={inpuesto}
+                                                                        onClick={() => setInpuesto(!inpuesto)}
+                                                                        name="inpuestoeKey"
+                                                                    /> Impuesto %
+                                                            </label>
+                                                    </div>
+                                                    <div className={'col-span-3'}>
+                                                        {
+                                                                    inpuesto ?
+                                                                                <input
+                                                                                    type="number"
+                                                                                    value={formProducts.tax}
+                                                                                    onChange={changesHandleProducts}
+                                                                                    name="tax"
+                                                                                    placeholder={'Insertar Impuestos'}
+                                                                                    className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
+                                                                                />
+                                                                    : null
+                                                                }
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div className={'col-span-6'}>
 
                                                 <div className={'grid grid-cols-6 gap-4'}>
