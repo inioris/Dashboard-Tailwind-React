@@ -71,7 +71,18 @@ export default function ProductsAndServices() {
     }, [formProducts.tax]);
 
     useEffect(() => {
-        if(Number(formProducts.priceBurchase) > 0) {
+            const otherName = 'price';
+            const otherPrice = (Number(formProducts.priceBurchase) * Number(formProducts.porcentagePrice)) / 100;
+            let price: any = Number(formProducts.priceBurchase) + otherPrice;
+            if(formProducts.tax > 0) {
+                const tax = (Number(price) * Number(formProducts.tax)) / 100;
+                price = price + tax;
+            }
+            setFormProducts(formProducts => ({...formProducts, [otherName]: price.toFixed(2) }));
+    }, [formProducts.porcentagePrice]);
+
+    useEffect(() => {
+        if(Number(formProducts.porcentagePrice) > 0 && Number(formProducts.tax) > 0) {
             const otherName = 'price';
             const otherPrice = (Number(formProducts.priceBurchase) * Number(formProducts.porcentagePrice)) / 100;
             let price: any = Number(formProducts.priceBurchase) + otherPrice;
@@ -81,10 +92,8 @@ export default function ProductsAndServices() {
             }
             setFormProducts(formProducts => ({...formProducts, [otherName]: price.toFixed(2) }));
         }
-    }, [formProducts.porcentagePrice]);
+    }, [formProducts.priceBurchase]);
 
-
-    console.log(formProducts);
     const onDeleteProducts = async (id: any) => {
         const data = {
             enabled: false,
