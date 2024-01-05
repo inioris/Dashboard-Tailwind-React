@@ -259,7 +259,7 @@ function PointSale() {
                                                         <label>&nbsp; { product.unit } &nbsp;</label>
                                                     <button className='rounded-full' type={'button'} onClick={() => lessUnity(key)} disabled={product.unit === 1}>-</button>
                                                 </td>
-                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.unitPriceTotal}</td>
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.unitPriceTotal.toFixed(2)}</td>
                                                 <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
                                                     <CancelIcons w="w-6" h="h-6" class={"text-blue-600 hover:text-red-800"} />
                                                 </td>
@@ -281,7 +281,7 @@ function PointSale() {
                         <div className={'bg-purple-500 rounded'}>
                             <span className={'text-xl flex justify-center p-5 text-white text-5xl'}>
                                 {
-                                    payment
+                                    payment.toFixed(2)
                                 }
                             </span>
                         </div>
@@ -300,7 +300,7 @@ function PointSale() {
                         </div>
                         <div className={'bg-purple-500 rounded'}>
                             <span className={'text-xl flex justify-center p-5 text-white text-3xl'}>
-                                Devuelta: { `$ ${Number(paymentMoney) - Number(payment)}` }
+                                Devuelta: { `$ ${(Number(paymentMoney) - Number(payment)).toFixed(2)}` }
                             </span>
                         </div>
                         <hr />
