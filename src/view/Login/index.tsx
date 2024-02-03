@@ -12,6 +12,7 @@ interface IPropsLogin {
 
 export default function Login( props : IPropsLogin){
     const { postAuthLogin } : any = useAuthLogin();
+    const [disable, setDisable] = useState(false); 
 
     const [DataUserLogin, setDataUserLogin] = useState({
         username: '',
@@ -26,14 +27,20 @@ export default function Login( props : IPropsLogin){
     }
 
     const checkLogin = async () => {
-        const dataUser: IUsersLogin = {
-            username: username,
-            password: password
-        }
-        await postAuthLogin(dataUser);
-
-        if (localStorage.getItem('AuthToken') !== undefined){
-            window.location.href = '/'
+        try {
+            setDisable(true);
+            const dataUser: IUsersLogin = {
+                username: username,
+                password: password
+            }
+            await postAuthLogin(dataUser);
+            if (localStorage.getItem('AuthToken') !== undefined){
+                setDisable(false);
+                window.location.href = '/'
+            }
+            setDisable(false);
+        } catch(e) {
+            setDisable(false);
         }
     }
 
@@ -93,10 +100,13 @@ export default function Login( props : IPropsLogin){
                                         <div>
                                             <button
                                                 type="submit"
-                                                disabled={password === '' || username === '' || username === undefined || password === undefined}
+                                                disabled={password === '' || username === '' || username === undefined || password === undefined || disable}
                                                 onClick={checkLogin}
                                                 className={`w-full rounded py-3 mt-6 tracking-widest ${ password === '' || username === '' || username === undefined || password === undefined ? 'bg-gray-400' : 'bg-blue-700' } text-white uppercase  shadow-lg focus:outline-none`}>
-                                                Iniciar
+                                                { disable ? <>
+                                                    <svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24" />
+                                                    Processing...
+                                                </> : 'Iniciar' }
                                             </button>
                                         </div>
                                     </div>
