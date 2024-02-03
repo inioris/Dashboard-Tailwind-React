@@ -24,12 +24,12 @@ export default function Home() {
         let data: number = 0;
         let dataLength: number= 0;
         let productQuantiy: number = 0;
-        const date = moment().subtract(0, 'days').format("YYYY-MM-DD");
+        const date = moment().subtract(1, 'days').format("YYYY-MM-DD");
         const dateMonth = moment().subtract(30, 'days').format("YYYY-MM-DD");
         let dataMonth: number = 0;
         
         checkIn.map((item: any) => {
-            if(moment(item.createdAt).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")){
+            if(moment(item.createdAt).format("YYYY-MM-DD") > moment(date).format("YYYY-MM-DD")){
                 data = data + Number(item.totalToPay);
                 dataLength += 1;
                 productQuantiy += Number(item.quantity);
