@@ -29,7 +29,7 @@ export default function Home() {
         let dataMonth: number = 0;
         
         checkIn.map((item: any) => {
-            if(moment(item.createdAt).format("YYYY-MM-DD") > moment(date).format("YYYY-MM-DD")){
+            if(moment(item.createdAt).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")){
                 data = data + Number(item.totalToPay);
                 dataLength += 1;
                 productQuantiy += Number(item.quantity);
