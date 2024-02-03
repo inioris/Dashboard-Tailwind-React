@@ -7,7 +7,7 @@ export function useProducts() {
     const dispatch : any = useDispatchProducts();
     return {
         async getAllProducts(query?: any){
-            const products: any = await getId(`${urlApi}/products?${query}`);
+            const products: any = await getId(`${urlApi}/products?enabled=1`);
             dispatch({
                 type: TypesProducts.GET_PRODUCTS,
                 payload: {

@@ -45,9 +45,18 @@ function PointSale() {
     const [rnc, setRNC] = useState('');
     const [taxes, setTaxes] = useState(0);
     const [showNotifications, setShowNotification] = useState(false);
-
     const [selectedProduct, setSelectedProduct] = useState(products[0])
-    const [query, setQuery] = useState('')
+    const [query, setQuery] = useState('');
+
+    const onRemoveList = () => {
+        setPaymentMoney(0);
+        setPayment(0);
+        setListViewProducts([]);
+        setCheckRNC(false);
+        setDiscounts(0);
+        setRNC('');
+        setTaxes(0);
+    }
 
     useEffect(() => {
         listViewProducts.map((item: InewSaleListPrime) => {
@@ -60,7 +69,7 @@ function PointSale() {
         const {value} = e.target;
         setInputSearch(value);
 
-        if(value.length === 4){
+        
             products.find((item: any) => {
                 if(item.code === value) {
                     setListViewProducts([...listViewProducts, {
@@ -74,7 +83,7 @@ function PointSale() {
                     setInputSearch('');
                 }
             });
-        }
+
     }
 
     const filteredProducts = query === '' ? products : products.filter((product: any) => {
@@ -146,15 +155,23 @@ function PointSale() {
             "listOfProductSale": listProductsSale
         };
 
-        await saveCheckIn(purchase);
-        setReceipt(!receipt);
-        setListViewProducts([]);
-        setShowNotification(!showNotifications);
-        setPayment(0);
-        setRNC('');
-        setTaxes(0);
-        setPaymentMoney(0);
+        await saveCheckIn(purchase).then(() => {
+            setReceipt(!receipt);
+            setListViewProducts([]);
+            setShowNotification(!showNotifications);
+            setPayment(0);
+            setRNC('');
+            setTaxes(0);
+            setPaymentMoney(0);
+            onRemoveList();
+        });
     }
+
+    const removeList = (key: number) => () => {
+        let dataRemove = listViewProducts.filter((element: any, item: any) => item !== key);
+        setListViewProducts([...dataRemove]);
+    }
+
 
     return (
         <>
@@ -175,23 +192,23 @@ function PointSale() {
                             <span className={'text-2xl pl-2'} style={{ borderLeft: '5px solid #0415FA' }}> Lista de Compras </span>
                         </div>
                         <div className={'grid grid-cols-2 gap-4 py-4'}>
-                            {/* <div className={'pl-2 col-span-1'}>
+                            <div className={'pl-2 col-span-1'}>
                                 <Input
                                     type="text"
-                                    max={4}
-                                    placeholder={'Agregar Productos'}
+                                    placeholder={'Codigo'}
                                     value={inputSearch}
                                     disable={isEmpty(products)}
                                     name={"searchProductsList"}
                                     onChange={onAddProductsList}
                                     wrapperClass={"mt-1 focus:ring-indigo-500 p-2 pl-3 2xl:text-xl focus:border-indigo-500 block w-full border shadow-sm sm:text-sm border-gray-300 rounded-md"}
                                 />
-                            </div> */}
+                            </div>
                             <div className={'col-span-1'}>
-                                <div className={'pb-2 pt-2 w-full'}>
+                                <div className={'pb-2 pt-6 w-full'}>
                                         <Combobox value={selectedProduct} onChange={setSelectedProduct}>
                                             <Combobox.Input
                                                 onChange={(event) => setQuery(event.target.value)}
+                                                placeholder={'Buscar por nombre del Producto'}
                                                 className={'mt-1 mb-2 bg-gray-50 w-full focus:ring-indigo-500 p-2 pl-3 2xl:text-xl focus:border-indigo-500 block border shadow-sm sm:text-sm border-gray-300 rounded-md'}
                                             />
 
@@ -255,13 +272,15 @@ function PointSale() {
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.name}</td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.price}</td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    <button disabled={product.productType === 1 ? false : true} className='rounded-full' type={'button'} onClick={() => moreUnity(key)}>+</button>
+                                                    <button className='rounded-full' type={'button'} onClick={() => moreUnity(key)}>+</button>
                                                         <label>&nbsp; { product.unit } &nbsp;</label>
-                                                    <button className='rounded-full' type={'button'} onClick={() => lessUnity(key)} disabled={product.unit === 1}>-</button>
+                                                    <button className='rounded-full' type={'button'} onClick={() => lessUnity(key)}>
+                                                        -
+                                                    </button>
                                                 </td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{product.unitPriceTotal.toFixed(2)}</td>
                                                 <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
-                                                    <CancelIcons w="w-6" h="h-6" class={"text-blue-600 hover:text-red-800"} />
+                                                    <span style={{ cursor: "pointer" }} onClick={removeList(key)}><CancelIcons w="w-6" h="h-6" class={"text-blue-600 hover:text-red-800"} /></span>
                                                 </td>
                                             </tr>
                                         ))}
@@ -272,7 +291,7 @@ function PointSale() {
                         <button
                             type="submit"
                             className={`inline-flex justify-center py-2 px-4 2xl:py-4 2xl:px-8 border border-transparent shadow-sm text-sm 2xl:text-2xl rounded-md text-white bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-                            onClick={()=>setListViewProducts([])}
+                            onClick={onRemoveList}
                         > Limpiar Lista de Compras </button>
                     </div>
                 </div>
@@ -289,6 +308,7 @@ function PointSale() {
                             <Input
                                  type="number"
                                  name="paymentMoney"
+                                 value={paymentMoney > 0 ? paymentMoney : null}
                                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                     e.preventDefault();
                                     const {value} = e.target;
@@ -316,6 +336,7 @@ function PointSale() {
                                         <Input
                                         type="number"
                                         name="paymentDesc"
+                                        value={discounts}
                                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                             e.preventDefault();
                                             const {value} = e.target;
@@ -338,8 +359,9 @@ function PointSale() {
                                 {
                                     checkRNC ?
                                         <Input
-                                        type="number"
+                                        type="text"
                                         name="rnc"
+                                        value={rnc}
                                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                             e.preventDefault();
                                             const {value} = e.target;

@@ -12,6 +12,7 @@ export default function Home() {
     const { getAllCheckIn } : any = useCheckIn();
     const { checkIn } : any = useStoreCheckIn();
     const [cuadre, setCuadre] = useState(0);
+    const [cuadreMonth, setCuadreMonth] = useState(0);
     const [saleLength, setSaleLength] = useState(0);
     const [productQuantity, setProductQuantity] = useState(0);
 
@@ -23,25 +24,32 @@ export default function Home() {
         let data: number = 0;
         let dataLength: number= 0;
         let productQuantiy: number = 0;
-        const date = moment().subtract(1, 'days').format("YYYY-MM-DD");
+        const date = moment().subtract(0, 'days').format("YYYY-MM-DD");
+        const dateMonth = moment().subtract(30, 'days').format("YYYY-MM-DD");
+        let dataMonth: number = 0;
         
         checkIn.map((item: any) => {
             if(moment(item.createdAt).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD")){
                 data = data + Number(item.totalToPay);
-                dataLength = dataLength + 1;
-                productQuantiy = productQuantiy + Number(item.quantity);
+                dataLength += 1;
+                productQuantiy += Number(item.quantity);
+            }
+
+            if(moment(item.createdAt).format("YYYY-MM-DD") > moment(dateMonth).format("YYYY-MM-DD")){
+                dataMonth += Number(item.totalToPay);
             }
         });
         setCuadre(data);
         setSaleLength(dataLength);
-        setProductQuantity(productQuantity);
+        setCuadreMonth(dataMonth)
+        setProductQuantity(productQuantiy);
     }, [checkIn]);
 
     const projects = [
-        { name: 'Cuadre de Caja', initials: 'CC', href: '#', subName: '$', members: `${cuadre}`, bgColor: 'bg-pink-600' },
+        { name: 'Cuadre de Caja', initials: 'CC', href: '#', subName: '$', members: cuadre, bgColor: 'bg-pink-600' },
         { name: 'Ventas en el Dia', initials: 'VD', href: '#', subName: 'Cantidad', members: `${saleLength}`, bgColor: 'bg-purple-600' },
-        { name: 'Inventario', initials: 'I', href: '#', members: 16, subName: '', bgColor: 'bg-yellow-500' },
-        { name: 'Productos y Servicios Vendidos', initials: 'PS', subName: 'Cantidad', members: `${productQuantity}`, bgColor: 'bg-green-500' },
+        { name: 'Ventas del mes', initials: 'I', href: '#', members: cuadreMonth, subName: '', bgColor: 'bg-yellow-500' },
+        { name: 'Productos', initials: 'PS', subName: 'Cantidad', members: productQuantity, bgColor: 'bg-green-500' },
       ];
 
     return (
@@ -49,32 +57,19 @@ export default function Home() {
             <div>
                 {/* information data headers */ }
                     <div className={'pb-6'}>
-                        <ul className="mt-3 grid grid-cols-1 gap-4 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                            {projects.map((project: any, index) => (
-                            <li key={project.name} className="col-span-1 flex shadow-sm rounded-md">
-                                <div className={`flex-shrink-0 flex items-center ${projects[index].bgColor} justify-center w-16 text-white text-sm font-medium rounded-l-md`}>
-                                {project.initials}
-                                </div>
-                                <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                                <div className="flex-1 px-6 py-4 text-sm truncate">
-                                    <Link to={`/${project.href}`} className="text-gray-900 font-medium hover:text-gray-600">
-                                        {project.name}
-                                    </Link>
-                                    <p className="text-gray-500"> {project.subName} {project.members}</p>
-                                </div>
-                                <div className="flex-shrink-0 pr-2">
-                                    <button
-                                    type="button"
-                                    className="w-8 h-8 bg-white inline-flex items-center justify-center text-gray-400 rounded-full bg-transparent hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                    >
-                                    <span className="sr-only">Open options</span>
-                                    
-                                    </button>
-                                </div>
-                                </div>
-                            </li>
-                            ))}
-                        </ul>
+                        <dl className={"mx-auto grid grid-cols-1 gap-px bg-gray-900/5 sm:grid-cols-2 lg:grid-cols-4"}>
+                            {
+                                projects.map((project: any) => (
+                                    <>
+                                        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 bg-white px-4 py-10 sm:px-6 xl:px-8">
+                                            <dt className="text-sm font-medium leading-6 text-gray-500">{ project.name }</dt>
+                                            <dd className="text-xs font-medium text-gray-700" />
+                                            <dd className="w-full flex-none text-2xl font-medium leading-10 tracking-tight text-gray-900">{project.subName} {project.members}</dd>
+                                        </div>
+                                    </>
+                                ))
+                            }
+                        </dl>
                     </div>
                     {/* End information data headers */ }
                     <hr className={'sm:pb-2 md:pb-2 xl:pb-3 2xl:pb-3'} />
@@ -134,7 +129,7 @@ export default function Home() {
                                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">${transaction.totalToPay}</td>
                                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">${transaction.moneyBack}</td>
                                                 <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                <Link to={`/${transaction.id}`} className={'text-indigo-600 hover:text-indigo-900'}>
+                                                <Link to={`/facturas`} className={'text-indigo-600 hover:text-indigo-900'}>
                                                     Ver       
                                                 </Link>
                                                 </td>

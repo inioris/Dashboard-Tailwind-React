@@ -5,6 +5,7 @@ import DashboardLayout from "./dashboard/layout";
 import Home from './view/Home';
 import Inventoy from './view/Inventory';
 import FactoryView from './view/Factory';
+import Administrator from './view/Administrator';
 import ProductsAndServices from './view/ProductsAndServices';
 import PointSale from './view/PointSale';
 import Login from './view/Login';
@@ -32,6 +33,7 @@ const App: FC = () => {
                                 <Route path="/productos-y-servicios" element={<ProductsAndServices />} />
                                 <Route path='/inventoy' element={<Inventoy />} />
                                 <Route path='/facturas' element={<FactoryView />} />
+                                <Route path='/admin' element={<Administrator />} />
                               </Routes>
                           </DashboardLayout>
                         </BrowserRouter>

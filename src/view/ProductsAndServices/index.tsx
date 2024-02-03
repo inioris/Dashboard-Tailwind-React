@@ -30,10 +30,11 @@ export default function ProductsAndServices() {
         name: '',
         description: '',
         statusProduct: 1,
+        code: '',
+        alertQuantity: 0,
         quantity: 0,
         price: 0,
         tax: 0,
-        expirationAlert: 0,
         priceBurchase: 0,
         porcentagePrice: 0,
         expirationDate: '',
@@ -46,14 +47,14 @@ export default function ProductsAndServices() {
     const [openDelete, setOpenDelete] = useState(false);
 
     useEffect(() => {
-        const query: any = 'enabled=1'
-        getAllProducts(query);
+        getAllProducts();
         // getAllCategory();
     }, []);
 
     const changesHandleProducts = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         e.preventDefault();
         const {name, value} = e.target;
+        console.log(formProducts);
         setFormProducts(formProducts => ({...formProducts, [name]: value }));
     }
 
@@ -103,16 +104,17 @@ export default function ProductsAndServices() {
     }
 
     const onSaveProducts = async () => {
-        if(formProducts.productType === 1){
+        // if(formProducts.productType === 1){
             const createProduct : any = {
                 name: formProducts.name,
+                code: formProducts.code,
                 user: authLogin.idUser,
+                alertQuantity: formProducts.alertQuantity,
                 statusProduct: formProducts.statusProduct,
                 quantity: formProducts.quantity,
                 tax: formProducts.tax,
                 price: Number(formProducts.price),
                 expirationDate: formProducts.expirationDate,
-                expirationAlert: formProducts.expirationAlert,
                 priceBurchase: Number(formProducts.priceBurchase),
                 porcentagePrice: formProducts.porcentagePrice,
                 productType: Number(formProducts.productType),
@@ -120,28 +122,29 @@ export default function ProductsAndServices() {
                 description: formProducts.description,
             };
             await saveProducts(createProduct);
-        }else {
-            const createService : any = {
-                name: formProducts.name,
-                user: authLogin.idUser,
-                expirationDate: '',
-                statusProduct: formProducts.statusProduct,
-                price: Number(formProducts.price),
-                productType: Number(formProducts.productType),
-                enabled: formProducts.enabled,
-                description: formProducts.description,
-            };
-            await saveProducts(createService);
-        }
+        // }else {
+        //     const createService : any = {
+        //         name: formProducts.name,
+        //         user: authLogin.idUser,
+        //         expirationDate: '',
+        //         statusProduct: formProducts.statusProduct,
+        //         price: Number(formProducts.price),
+        //         productType: Number(formProducts.productType),
+        //         enabled: formProducts.enabled,
+        //         description: formProducts.description,
+        //     };
+        //     await saveProducts(createService);
+        // }
         setFormProducts({
             name: '',
             description: '',
             quantity: 0,
+            code: '',
             tax: 0,
+            alertQuantity: 0,
             statusProduct: 1,
             price: 0,
             porcentagePrice: 0,
-            expirationAlert: 0,
             expirationDate: '',
             priceBurchase: 0,
             productType: 1,
@@ -153,10 +156,12 @@ export default function ProductsAndServices() {
 
     const onUpdatedProducts = async (id: any) => {
 
-        if(formProducts.productType === 1){
+        // if(formProducts.productType === 1){
             const createUpdated : any = {
                 name: formProducts.name,
                 user: authLogin.idUser,
+                code: formProducts.code,
+                alertQuantity: formProducts.alertQuantity,
                 tax: Number(formProducts.tax),
                 quantity: Number(formProducts.quantity),
                 price: Number(formProducts.price),
@@ -167,28 +172,29 @@ export default function ProductsAndServices() {
                 description: formProducts.description,
             };
             await updatedProducts(id, createUpdated);
-        }else {
-            const createUpdated : any = {
-                name: formProducts.name,
-                user: authLogin.idUser,
-                price: Number(formProducts.price),
-                productType: Number(formProducts.productType),
-                enabled: formProducts.enabled,
-                expirationDate: formProducts.expirationDate,
-                description: formProducts.description,
-            };
-            await updatedProducts(id, createUpdated);
-        }
+        // }else {
+        //     const createUpdated : any = {
+        //         name: formProducts.name,
+        //         user: authLogin.idUser,
+        //         price: Number(formProducts.price),
+        //         productType: Number(formProducts.productType),
+        //         enabled: formProducts.enabled,
+        //         expirationDate: formProducts.expirationDate,
+        //         description: formProducts.description,
+        //     };
+        //     await updatedProducts(id, createUpdated);
+        // }
 
         setFormProducts({
             name: '',
             description: '',
             statusProduct: 1,
+            alertQuantity: 0,
             tax: 0,
+            code: '',
             quantity: 0,
             price: 0,
             porcentagePrice: 0,
-            expirationAlert: 0,
             priceBurchase: 0,
             expirationDate: '',
             productType: 1,
@@ -302,11 +308,12 @@ export default function ProductsAndServices() {
                                                                             name: product.name,
                                                                             description: product.description,
                                                                             quantity: product.quantity,
-                                                                            expirationDate: '',
-                                                                            statusProduct: 1,
-                                                                            tax: product.porcentagePrice,
+                                                                            expirationDate: product.expirationDate,
+                                                                            statusProduct: product.statusProduct,
+                                                                            code: product.code,
+                                                                            alertQuantity: product.alertQuantity,
+                                                                            tax: product.tax,
                                                                             porcentagePrice: product.porcentagePrice,
-                                                                            expirationAlert: product.expirationAlert,
                                                                             price: product.price,
                                                                             priceBurchase: product.priceBurchase,
                                                                             productType: product.productType?.id,
@@ -361,7 +368,7 @@ export default function ProductsAndServices() {
                                     <div className="shadow overflow-hidden">
                                         <div className="px-4 py-5 bg-white sm:p-6">
                                         <div className="grid grid-cols-6 gap-6">
-                                            {/* <div className="col-span-6 sm:col-span-4">
+                                            <div className="col-span-6 sm:col-span-4">
                                                 <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
                                                     Codigo de Producto o Servicio
                                                 </label>
@@ -370,12 +377,11 @@ export default function ProductsAndServices() {
                                                     name="code"
                                                     onChange={changesHandleProducts}
                                                     placeholder={'Codigo Producto o Servicio'}
-                                                    value={formProducts.name}
-                                                    id="first-name"
+                                                    value={formProducts.code}
                                                     autoComplete="given-name"
                                                     className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
                                                 />
-                                            </div> */}
+                                            </div>
                                             <div className="col-span-6 sm:col-span-4">
                                                 <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
                                                     Nombre de Producto o Servicio
@@ -550,10 +556,10 @@ export default function ProductsAndServices() {
                                                                 </label>
                                                                 <input
                                                                     type="number"
-                                                                    value={formProducts.expirationAlert}
+                                                                    value={formProducts.alertQuantity}
                                                                     disabled={disable}
                                                                     onChange={changesHandleProducts}
-                                                                    name="expirationAlert"
+                                                                    name="alertQuantity"
                                                                     className="mt-1 focus:ring-indigo-500 p-3 focus:border-indigo-500 block w-full shadow-sm sm:text-sm  border border-gray-200 rounded-md"
                                                                 />
                                                                 </div>

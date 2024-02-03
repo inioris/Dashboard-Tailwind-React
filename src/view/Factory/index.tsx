@@ -21,7 +21,10 @@ export default function FactoryView(){
     const [nFacture, setNFacture] = useState(0);
     const [dataAdicionaly, setDataAdicionaly] = useState({
         rnc: '',
-        iva: '',
+        username: '',
+        payWith: '',
+        moneyBack: '',
+        totalToPay: ''
     })
 
     useEffect(() => {
@@ -115,15 +118,19 @@ export default function FactoryView(){
                                                 <td className="whitespace-nowrap px-2 py-2 text-sm text-gray-500">${transaction.moneyBack}</td>
                                                 <td className="relative whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                                     <button onClick={() => { 
-                                                        setOpenShow(true);
+                                                        console.log(transaction);
                                                         setNFacture(transaction.id);
                                                         onShowProductsSale(transaction.id);
                                                         setDataAdicionaly({
-                                                            rnc: transaction.checkIn.rnc,
-                                                            iva: transaction.checkIn.iva,
+                                                            rnc: transaction.rnc,
+                                                            username: transaction.user.name,
+                                                            payWith: transaction.payWith,
+                                                            moneyBack: transaction.moneyBack,
+                                                            totalToPay: transaction.totalToPay
                                                         });
+                                                        setOpenShow(true);
                                                         }
-                                                        } className="bg-blue-300 p-3 text-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                        } className="bg-blue-600 p-3 text-white rounded-md inline-flex focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                         Ver ventas
                                                     </button>
                                                 </td>
@@ -154,11 +161,23 @@ export default function FactoryView(){
                                                         <div><span className={'text-sm text-gray-400'}> {get(dataAdicionaly, 'rnc', '')} </span></div>
                                                     </div>
                                                     <div className={'grid'}>
-                                                         <div className={'text-base text-gray-800'}>IVA</div>
-                                                         <div><span className={'text-sm text-gray-400'}> {get(dataAdicionaly, 'iva', '')} </span></div>
+                                                         <div className={'text-base text-gray-800'}>Realizada Por</div>
+                                                         <div><span className={'text-sm text-gray-400'}> {get(dataAdicionaly, 'username', '')} </span></div>
+                                                    </div>
+                                                    <div className={'grid'}>
+                                                         <div className={'text-base text-gray-800'}>Monto Total</div>
+                                                         <div><span className={'text-sm text-gray-400'}> {get(dataAdicionaly, 'totalToPay', '')} </span></div>
+                                                    </div>
+                                                    <div className={'grid'}>
+                                                         <div className={'text-base text-gray-800'}>Pago con</div>
+                                                         <div><span className={'text-sm text-gray-400'}> {get(dataAdicionaly, 'payWith', '')} </span></div>
+                                                    </div>
+                                                    <div className={'grid'}>
+                                                         <div className={'text-base text-gray-800'}>Devuelta</div>
+                                                         <div><span className={'text-sm text-gray-400'}> {get(dataAdicionaly, 'moneyBack', '')} </span></div>
                                                     </div>
                                                 </div>
-                                                <div className={'grid p-4'}>
+                                                <div className={'grid p-4 border'}>
                                                     {
                                                         productsSale.map((item: any) => (
                                                             <div className={'grid grid-cols-5 border-b pb-2'}>
@@ -184,6 +203,7 @@ export default function FactoryView(){
                                                         ))
                                                     }
                                                 </div>
+                                                
                                             </div>
                                         </div>
                                     </div>
